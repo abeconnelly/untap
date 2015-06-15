@@ -1,0 +1,28 @@
+#!/bin/bash
+#
+# Download all reports
+#
+
+#./download_reports.sh huid_report_url.csv
+
+find data -type f > json_reports.list
+
+./create_digest.sh
+cd out-data
+
+#echo -e "id\tjson_record" > ge-suff.tsv
+#echo -e "id\tjson_record" > ge-insuff.tsv
+rm -f ge-suff.tsv ge-insuff.tsv
+
+sort -u ge-suff-raw.tsv | awk '{print NR "\t" $0}' >> ge-suff.tsv
+sort -u ge-insuff-raw.tsv | awk '{print NR "\t" $0}' >> ge-insuff.tsv
+
+rm -f ge-suff-raw.tsv
+rm -f ge-insuff-raw.tsv
+
+cd ..
+
+./create_hu_report_map.py
+
+cat ../untap-db-report.xx | sqlite3 out-data/report.db
+

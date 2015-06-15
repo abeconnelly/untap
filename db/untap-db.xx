@@ -1,0 +1,256 @@
+
+-- survey
+
+drop table if exists survey;
+create table survey (
+  id integer primary key,
+  human_id varchar(255),
+  date datetime,
+  phenotype_category varchar(255),
+  phenotype varchar(255)
+);
+
+.separator "\t"
+.import "out-data/survey.tsv" foo
+insert into survey (
+  human_id,
+  date,
+  phenotype_category,
+  phenotype
+)
+select
+  human_id,
+  date,
+  phenotype_category,
+  phenotype
+from foo;
+drop table foo;
+
+create index survey_huid_idx on survey (human_id);
+create index survey_date_idx on survey (date);
+create index survey_phenotype_category_idx on survey (phenotype_category);
+create index survey_phenotype_idx on survey (phenotype);
+
+
+
+-- test_results
+
+drop table if exists test_results;
+create table test_results (
+  id integer primary key,
+  human_id varchar(255),
+  name varchar(255),
+  result varchar(255),
+  date varchar(255)
+);
+
+create index test_results_idx on test_results(human_id);
+
+drop table if exists foo;
+create table foo (
+  human_id varchar(255),
+  name varchar(255),
+  result varchar(255),
+  date varchar(255)
+);
+.separator "\t"
+.import test_results.tsv foo
+insert into test_results(human_id, name, result, date) select foo.human_id, foo.name, foo.result, foo.date from foo;
+
+
+
+-- allergies
+
+drop table if exists allergies;
+create table allergies (
+  id integer primary key,
+  human_id varchar(255),
+  name varchar(255),
+  severity varchar(255),
+  start_date varchar(255),
+  end_date varchar(255)
+);
+
+create index allergies_idx on allergies(human_id);
+
+drop table if exists foo;
+create table foo (
+  human_id varchar(255),
+  name varchar(255),
+  severity varchar(255),
+  start_date varchar(255),
+  end_date varchar(255)
+);
+.separator "\t"
+.import allergies.tsv foo
+insert into allergies(human_id, name, severity, start_date, end_date) select human_id, name, severity, start_date, end_date from foo;
+
+
+-- conditions
+
+drop table if exists conditions;
+create table conditions (
+  id integer primary key,
+  human_id varchar(255),
+  name varchar(255),
+  start_date varchar(255),
+  end_date varchar(255)
+);
+
+create index conditions_idx on conditions(human_id);
+
+drop table if exists foo;
+create table foo (
+  human_id varchar(255),
+  name varchar(255),
+  start_date varchar(255),
+  end_date varchar(255)
+);
+.separator "\t"
+.import conditions.tsv foo
+insert into conditions(human_id, name, start_date, end_date) select human_id, name, start_date, end_date from foo;
+
+
+
+-- demographics
+
+drop table if exists demographics;
+create table demographics (
+  id integer primary key,
+  human_id varchar(255),
+  date_of_birth varchar(255),
+  gender varchar(255),
+  weight varchar(255),
+  height varchar(255),
+  blood_type varchar(255),
+  race varchar(255)
+);
+
+create index demographics_idx on demographics(human_id);
+
+drop table if exists foo;
+create table foo (
+  human_id varchar(255),
+  date_of_birth varchar(255),
+  gender varchar(255),
+  weight varchar(255),
+  height varchar(255),
+  blood_type varchar(255),
+  race varchar(255)
+);
+.separator "\t"
+.import demographics.tsv foo
+insert into demographics(human_id, date_of_birth, gender, weight, height, blood_type, race) select human_id, date_of_birth, gender, weight, height, blood_type, race from foo;
+
+
+
+-- immunizations
+
+drop table if exists immunizations;
+create table immunizations (
+  id integer primary key,
+  human_id varchar(255),
+  name varchar(255),
+  date varchar(255)
+);
+
+create index immunizations_idx on immunizations(human_id);
+
+drop table if exists foo;
+create table foo (
+  human_id varhcar(255),
+  name varchar(255),
+  date varchar(255)
+);
+.separator "\t"
+.import immunizations.tsv foo
+insert into immunizations(human_id, name, date) select human_id, name, date from foo;
+
+
+-- medications
+
+drop table if exists medications;
+create table medications (
+  id integer primary key,
+  human_id varchar(255),
+  name varchar(255),
+  dosage varchar(255),
+  frequency varchar(255),
+  start_date varchar(255),
+  end_date varchar(255)
+);
+
+create index medications_idx on medications(human_id);
+
+drop table if exists foo;
+create table foo (
+  human_id varchar(255),
+  name varchar(255),
+  dosage varchar(255),
+  frequency varchar(255),
+  start_date varchar(255),
+  end_date varchar(255)
+);
+.separator "\t"
+.import medications.tsv foo
+insert into medications(human_id, name, dosage, frequency, start_date, end_date) select  human_id, name, dosage, frequency, start_date, end_date from foo;
+
+
+-- procedures
+
+drop table if exists procedures;
+create table procedures (
+  id integer primary key,
+  human_id varchar(255),
+  name varchar(255),
+  date varchar(255)
+);
+
+create index procedures_idx on procedures(human_id);
+
+drop table if exists foo;
+create table foo (
+  human_id varchar(255),
+  name varchar(255),
+  date varchar(255)
+);
+.separator "\t"
+.import procedures.tsv foo
+insert into procedures(human_id, name, date) select human_id, name, date from foo;
+
+
+
+-- uploaded data
+
+drop table if exists uploaded_data;
+create table uploaded_data (
+  id integer primary key,
+  human_id varchar(255),
+  date varchar(255),
+  data_type varchar(255),
+  source varchar(255),
+  name varchar(255),
+  download_description varchar(255),
+  download_url varchar(255),
+  report_description varchar(255),
+  report_url varchar(255)
+);
+
+create index uploaded_data_idx on uploaded_data(human_id);
+
+drop table if exists foo;
+create table foo (
+  human_id varchar(255),
+  date varchar(255),
+  data_type varchar(255),
+  source varchar(255),
+  name varchar(255),
+  download_description varchar(255),
+  download_url varchar(255),
+  report_description  varchar(255),
+  report_url varchar(255)
+);
+.separator "\t"
+.import uploaded_data.tsv foo
+insert into uploaded_data(human_id, date, data_type, source, name, download_description, download_url, report_description, report_url) select human_id, date, data_type, source, name, download_description, download_url, report_description, report_url from foo;
+
