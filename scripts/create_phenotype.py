@@ -60,7 +60,7 @@ g_phenotype_class = {}
 # fields, noticing when a line has a newline inside of a double quote.  It deletes
 # the newline and puts the field element all on one line.
 #
-txt = sp.check_output( "./fmt_lines.pl " + fn_survey + " | csvtool col 1- -u TAB -", shell=True)
+txt = sp.check_output( "fmt_lines.pl " + fn_survey + " | csvtool col 1- -u TAB -", shell=True)
 lines = txt.split("\n")
 enum_phen = {}
 
@@ -133,7 +133,7 @@ for fn in fn_trait:
   # fields, noticing when a line has a newline inside of a double quote.  It deletes
   # the newline and puts the field element all on one line.
   #
-  txt = sp.check_output( "./fmt_lines.pl " + fn + " | csvtool col 1- -u TAB -", shell=True)
+  txt = sp.check_output( "fmt_lines.pl " + fn + " | csvtool col 1- -u TAB -", shell=True)
   lines = txt.split("\n")
 
   enum_phen = {}

@@ -1,5 +1,7 @@
 #!/bin/bash
 
+export PATH="$PATH:.:scripts"
+
 set -e
 set -o pipefail
 
