@@ -65,7 +65,6 @@ lines = txt.split("\n")
 enum_phen = {}
 
 phen_prefix = "Participant_Survey"
-#print ">>>>>", phen_prefix
 
 marked_survey_fields = { "Sex/Gender":1, "Race/ethnicity":1, "Month of birth":1, "Anatomical sex at birth":1, "Year of birth":1 }
 skip_survey_fields = { "Do not touch!" : 1 }
@@ -138,7 +137,7 @@ for fn in fn_trait:
 
   enum_phen = {}
 
-  phen_prefix = re.sub( r'PGP_Trait_Disease_Survey_2012_(.*)\.csv', r'\1', fn )
+  phen_prefix = re.sub( r'^.*PGP_Trait_Disease_Survey_2012_(.*)\.csv', r'\1', fn )
 
   header = True
   for l in lines:

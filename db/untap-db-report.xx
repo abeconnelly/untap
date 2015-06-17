@@ -57,7 +57,7 @@ create table foo (
 );
 .separator "\t"
 .import "ge-suff-hu-map.tsv" foo
-insert into human_suff_record_map(human_id, suff_record_index) select human_id, suff_record_index from foo;
+insert into human_suff_record_map(human_id, suff_record_index) select human_id, suff_record_index from foo where human_id != 'human_id';
 drop table foo;
 
 
@@ -85,7 +85,7 @@ create table foo (
 );
 .separator "\t"
 .import "ge-insuff-hu-map.tsv" foo
-insert into human_insuff_record_map(human_id, insuff_record_index) select human_id, insuff_record_index from foo;
+insert into human_insuff_record_map(human_id, insuff_record_index) select human_id, insuff_record_index from foo where human_id != 'human_id';
 drop table foo;
 
 create index human_insuff_record_idx on human_insuff_record_map (human_id);
