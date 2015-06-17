@@ -1,3 +1,4 @@
+drop table if exists foo;
 
 -- survey
 
@@ -11,7 +12,8 @@ create table survey (
 );
 
 .separator "\t"
-.import "out-data/survey.tsv" foo
+-- .import "out-data/survey.tsv" foo
+.import "survey.tsv" foo
 insert into survey (
   human_id,
   date,

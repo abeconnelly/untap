@@ -8,7 +8,7 @@ create table human_record_locator (
   locator varchar(255)
 );
 .separator "\t"
-.import "out-data/human-report-map.tsv" human_record_locator
+.import "human-report-map.tsv" human_record_locator
 
 create index human_record_locator_huid_idx on human_record_locator (human_id);
 create index human_record_locator_loc_idx on human_record_locator (locator);
@@ -23,7 +23,7 @@ create table suff_record (
   json_record  varchar(255)
 );
 .separator "\t"
-.import "out-data/ge-suff.tsv" suff_record
+.import "ge-suff.tsv" suff_record
 
 create index suff_record_idx on suff_record (json_record);
 
@@ -36,7 +36,7 @@ create table insuff_record (
   json_record  varchar(255)
 );
 .separator "\t"
-.import "out-data/ge-insuff.tsv" insuff_record
+.import "ge-insuff.tsv" insuff_record
 
 create index insuff_record_idx on insuff_record (json_record);
 
@@ -56,13 +56,13 @@ create table foo (
   suff_record_index varchar(255)
 );
 .separator "\t"
-.import "out-data/ge-suff-hu-map.tsv" foo
+.import "ge-suff-hu-map.tsv" foo
 insert into human_suff_record_map(human_id, suff_record_index) select human_id, suff_record_index from foo;
 drop table foo;
 
 
 -- .separator "\t"
--- .import "out-data/ge-suff-hu-map.tsv" human_suff_record_map
+-- .import "ge-suff-hu-map.tsv" human_suff_record_map
 
 create index human_suff_record_idx on human_suff_record_map (human_id);
 create index human_suff_record_2_idx on human_suff_record_map (suff_record_index);
@@ -84,7 +84,7 @@ create table foo (
   insuff_record_index varchar(255)
 );
 .separator "\t"
-.import "out-data/ge-insuff-hu-map.tsv" foo
+.import "ge-insuff-hu-map.tsv" foo
 insert into human_insuff_record_map(human_id, insuff_record_index) select human_id, insuff_record_index from foo;
 drop table foo;
 

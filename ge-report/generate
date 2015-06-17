@@ -3,7 +3,7 @@
 # Download all reports
 #
 
-#./download_reports.sh huid_report_url.csv
+./download_reports.sh huid_report_url.csv
 
 find data -type f > json_reports.list
 
@@ -24,5 +24,5 @@ cd ..
 
 ./create_hu_report_map.py
 
-cat ../untap-db-report.xx | sqlite3 out-data/report.db
+#cat ../untap-db-report.xx | sqlite3 out-data/report.db
 

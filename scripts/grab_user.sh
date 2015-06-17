@@ -31,7 +31,7 @@ cur_start="0"
 while [ "$cur_start" -lt "$tot_rec" ]
 do
   $verbose && echo "$cur_start / $tot_rec"
-  curl --silent -H "$h0" -H "$h1" "$url?$adj_param=$cur_start&$d_param=$dn&$param" | jq -r '.aaData[].hex' >> $ofn
+  curl --silent -H "$h0" -H "$h1" "$url?$adj_param=$cur_start&$d_param=$dn&$param" | jq -r '.aaData[].hex' | egrep -v '^null$' >> $ofn
   cur_start=`expr "$cur_start" "+" "$dn"`
 done
 

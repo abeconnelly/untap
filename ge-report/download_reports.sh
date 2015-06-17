@@ -15,6 +15,8 @@
 set -e
 set -o pipefail
 
+mkdir -p data
+
 listfn="$1"
 
 if [ ! -f "$listfn" ]
