@@ -51,11 +51,11 @@ with open("out-data/ge-insuff.tsv") as fp:
 
 suff_ofp_raw = open("out-data/ge-suff-hu-map.tsv", "w")
 insuff_ofp_raw = open("out-data/ge-insuff-hu-map.tsv", "w")
-hu_rep_ofp_raw = open("out-data/human-report-map.tsv", "w")
+#hu_rep_ofp_raw = open("out-data/human-report-map.tsv", "w")
 
 suff_ofp = csv.writer(suff_ofp_raw, delimiter="\t", lineterminator="\n")
 insuff_ofp = csv.writer(insuff_ofp_raw, delimiter="\t", lineterminator="\n")
-hu_rep_ofp = csv.writer(hu_rep_ofp_raw, delimiter="\t", lineterminator="\n")
+#hu_rep_ofp = csv.writer(hu_rep_ofp_raw, delimiter="\t", lineterminator="\n")
 
 hu_rep_map = {}
 hu_rep_ind = 0
@@ -72,7 +72,7 @@ INCLUDE_HEADER=False
 if INCLUDE_HEADER:
   suff_ofp.writerow(["human_report_id", "csvlist"])
   insuff_ofp.writerow(["human_report_id","csvlist"])
-  hu_rep_ofp.writerow(["id","human_id","locator"])
+  #hu_rep_ofp.writerow(["id","human_id","locator"])
 
 
 fp = open("json_reports.list")
@@ -81,18 +81,21 @@ for line in fp:
   print line
 
   z = line.split('/')
-  zz = z[2].split('-')
+  #zz = z[2].split('-')
+  t = z[2].split(':')
+  uploaded_data_id = t[0]
 
-  hu_rep_key = z[1] + "\t" + zz[1]
-  cur_rep_ind = -1
-  if hu_rep_key not in hu_rep_map:
-    cur_rep_ind = hu_rep_ind
-    hu_rep_map[hu_rep_key] = hu_rep_ind
-    #hu_rep_ofp.write(str(hu_rep_ind) + "\t" + str(hu_rep_key) + "\n")
-    hu_rep_ofp.writerow([str(hu_rep_ind), str(z[1]), str(zz[1])])
-    hu_rep_ind+=1
-  else:
-    cur_rep_ind = hu_rep_map[hu_rep_key]
+
+#  hu_rep_key = z[1] + "\t" + zz[1]
+#  cur_rep_ind = -1
+#  if hu_rep_key not in hu_rep_map:
+#    cur_rep_ind = hu_rep_ind
+#    hu_rep_map[hu_rep_key] = hu_rep_ind
+#    #hu_rep_ofp.write(str(hu_rep_ind) + "\t" + str(hu_rep_key) + "\n")
+#    hu_rep_ofp.writerow([str(hu_rep_ind), str(z[1]), str(zz[1])])
+#    hu_rep_ind+=1
+#  else:
+#    cur_rep_ind = hu_rep_map[hu_rep_key]
 
   suff_list=[]
   insuff_list=[]
@@ -119,13 +122,15 @@ for line in fp:
 
   for ind in suff_list:
     #suff_ofp.write( str(cur_rep_ind) + "\t" + str(ind) + "\n" )
-    suff_ofp.writerow([str(cur_rep_ind), str(ind)])
+    #suff_ofp.writerow([str(cur_rep_ind), str(ind)])
+    suff_ofp.writerow([str(uploaded_data_id), str(ind)])
 
   for ind in insuff_list:
     #insuff_ofp.write( str(cur_rep_ind) + "\t" + str(ind) + "\n" )
-    insuff_ofp.writerow([str(cur_rep_ind), str(ind)])
+    #insuff_ofp.writerow([str(cur_rep_ind), str(ind)])
+    insuff_ofp.writerow([str(uploaded_data_id), str(ind)])
 
 fp.close()
 suff_ofp_raw.close()
 insuff_ofp_raw.close()
-hu_rep_ofp_raw.close()
+#hu_rep_ofp_raw.close()

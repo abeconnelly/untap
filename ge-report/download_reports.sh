@@ -49,8 +49,11 @@ export -f download_link
 para_download_link() {
   local line="$1"
 
-  local huid=`echo "$line" | cut -f1 -d'|'`
-  local url=`echo "$line" | cut -f2 -d'|'`
+  #local huid=`echo "$line" | cut -f1 -d'|'`
+  #local url=`echo "$line" | cut -f2 -d'|'`
+  local updateid=`echo "$line" | cut -f1 -d'|'`
+  local huid=`echo "$line" | cut -f2 -d'|'`
+  local url=`echo "$line" | cut -f3 -d'|'`
   local dlid=`echo "$url" | egrep -o 'display_genome_id=[^&]*' | cut -f2- -d'=' | sed 's/\+/_/g'`
   local tok=`echo "$url" | egrep -o 'access_token=[^&]*' | cut -f2- -d'=' | sed 's/\+/_/g'`
 
@@ -61,7 +64,7 @@ para_download_link() {
   local b_url=`echo "$url" | cut -f1 -d'?'`
   local fin_url="$b_url?display_genome_id=$dlid$tok&json=true"
 
-  local ofn="data/$huid/$huid-$dlid-report.json"
+  local ofn="data/$huid/$updateid:$huid-$dlid-report.json"
 
   #local url="$url&json=true"
   #download_link $ofn $url

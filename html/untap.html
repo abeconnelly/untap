@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+
+    <!-- bar graph style -->
+    <style>
+    .bar { fill: steelblue; }
+    .bar:hover { fill: brown; }
+    .axis { font: 10px sans-serif; }
+    .axis path, .axis line { fill: none; stroke: #000; shape-rendering: crispEdges; }
+    .x.axis path { display: none; }
+    </style>
+
+    <link href="css/bootstrap.css" rel="stylesheet">
+    <link href="css/dashboard.css" rel="stylesheet">
+    <script src="js/jquery.min.js"></script>
+    <script src="js/bootstrap.js"></script>
+    <script src="js/gunzip.min.js"></script>
+    <script src="js/sql.js"></script>
+    <script src="js/d3.min.js"></script>
+
+    <script src='js/untap.js'></script>
+    <script src='js/untap-bargraph.js'></script>
+    <script src='js/untap-bargraph-grouped.js'></script>
+
+  </head>
+
+  <body>
+
+    <!-- Modal -->
+    <div class="modal fade" id="schemaModal" tabindex="-1" role="dialog" aria-labelledby="schemaModalLabel">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="schemaModalLabel">Database Schema</h4>
+          </div>
+          <div class="modal-body">
+
+            <div class='row'>
+              <div class='col-sm-6'> <b>survey</b> </div>
+              <div class='col-sm-6'> <b>uploaded_data</b> </div>
+            </div>
+
+            <div class='row'>
+              <div class='col-sm-6'>
+                <code>id</code>, <code>human_id</code>, <code>date</code>, <code>phenotype_category</code>, <code>phenotype</code>
+              </div>
+
+
+              <div class='col-sm-6'>
+                <code>id</code>
+                <code>human_id</code>
+                <code>date</code>
+                <code>data_type</code>
+                <code>source</code>
+                <code>name</code>
+                <code>download_description</code>
+                <code>download_url</code>
+                <code>report_description</code>
+                <code>report_url</code>
+              </div>
+            </div>
+
+            <hr />
+
+            <div class='row'>
+              <div class='col-sm-6'> <b>allergies</b> </div> 
+              <div class='col-sm-6'> <b>conditions</b> </div> 
+            </div>
+
+            <div class='row'>
+
+              <div class="col-sm-6">
+                <code>id</code> <code>human_id</code> <code>name</code> <code>severity</code> <code>start_date</code> <code>end_date</code>
+              </div>
+
+              <div class="col-sm-6">
+                 <code>id</code> <code>human_id</code> <code>name</code> <code>start_date</code> <code>end_date</code>
+              </div>
+
+            </div>
+
+            <br/>
+
+            <div class='row'>
+              <div class='col-sm-6'> <b>demographics</b> </div> 
+              <div class='col-sm-6'> <b>immunizations</b> </div>
+            </div>
+
+            <div class='row'>
+
+              <div class="col-sm-6">
+                 <code>id</code> <code>human_id</code> <code>date_of_birth</code> <code>gender</code> <code>weight</code> <code>height</code> <code>blood_type</code> <code>race</code>
+              </div>
+
+              <div class="col-sm-6">
+                 <code>id</code> <code>human_id</code> <code>name</code> <code>date</code>
+              </div>
+
+            </div>
+
+            <br/>
+
+
+            <div class='row'>
+              <div class='col-sm-6'> <b>medications</b> </div>
+              <div class='col-sm-6'> <b>procedures</b> </div>
+            </div>
+
+            <div class='row'>
+              <div class="col-sm-6">
+                 <code>id</code> <code>human_id</code> <code>name</code> <code>dosage</code> <code>frequency</code> <code>start_date</code> <code>end_date</code>
+              </div>
+
+              <div class="col-sm-6">
+                 <code>id</code> <code>human_id</code> <code>name</code> <code>date</code>
+              </div>
+
+            </div>
+
+            <br/>
+
+
+            <div class='row'>
+              <div class='col-sm-6'> <b>test_results</b> </div>
+              <div class='col-sm-6'> </div> 
+            </div>
+
+            <div class='row'>
+
+              <div class="col-sm-6">
+                 <code>id</code> <code>human_id</code> <code>name</code> <code>result</code> <code>date</code>
+              </div>
+
+              <div class="col-sm-6">
+              </div>
+
+            </div>
+
+            <hr />
+
+            <div class='row'>
+              <div class='col-sm-6'> <b>suff_record</b> </div>
+              <div class='col-sm-6'> <b>human_suff_record_map</b> </div>
+            </div>
+
+            <div class='row'>
+
+              <div class="col-sm-6">
+                 <code>id</code> <code>json_record</code>
+              </div>
+
+              <div class="col-sm-6">
+                 <code>id</code> <code>uploaded_data_id</code> <code>suff_record_index</code>
+              </div>
+
+            </div>
+
+            <br/>
+
+            <div class='row'>
+              <div class='col-sm-6'> <b>insuff_record</b> </div>
+              <div class='col-sm-6'> <b>human_insuff_record_map</b> </div>
+            </div>
+
+
+            <div class='row'>
+
+              <div class="col-sm-6">
+                 <code>id</code> <code>json_record</code>
+              </div>
+
+              <div class="col-sm-6">
+                 <code>id</code> <code>uploaded_data_id</code> <code>insuff_record_index</code>
+              </div>
+
+            </div>
+
+          </div>
+
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">untap</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+
+
+          <ul class="nav navbar-nav navbar-right">
+            <li>
+            <a href='#'>
+              <button type="button" class="btn btn-sm" data-toggle="modal" data-target="#schemaModal"> Schema </button>
+            </a>
+            </li>
+          </ul>
+
+        </div>
+      </div>
+    </nav>
+
+
+
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-sm-3 col-md-2 sidebar">
+
+          <ul class="nav nav-sidebar">
+            <li class="active"><a href="#">bargraph<span class="sr-only">(current)</span></a></li>
+            <li><a href="#">bargraph / stacked</a></li>
+            <li><a href="#">bargraph / grouped</a></li>
+          </ul>
+
+          <ul class="nav nav-sidebar">
+            <li><a href="">donut</a></li>
+            <li><a href="">donut / multiple</a></li>
+          </ul>
+
+          <ul class="nav nav-sidebar">
+            <li><a href="">matrix</a></li>
+          </ul>
+
+        </div>
+
+        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+          <h1 class='page-header'>untap</h1>
+
+          <div class='btn-group'>
+            <button type='button' class='btn btn-default dropdown-toggle' data-toggle='dropdown' aria-haspopup="true" aria-expanded="false">
+              Group by<span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu">
+              <li><a href="#" onclick="plot_survey_bargraph('Sex/Gender');" >Sex/Gender</a></li>
+              <li><a href="#" onclick="plot_survey_bargraph('Race/ethnicity');" >Race/ethnicity</a></li>
+              <li><a href="#" onclick="plot_survey_bargraph('Age');" >Age</a></li>
+              <li><a href="#" onclick="plot_survey_bargraph('Year of birth');" >Year of birth</a></li>
+              <li><a href="#" onclick="plot_uploaded_data_summary();" >Uploaded data summary</a></li>
+              <li><a href="#">Something else here</a></li>
+              <li role="separator" class="divider"></li>
+              <li><a href="#">Separated link</a></li>
+            </ul>
+          </div>
+
+          <div id='graph'></div>
+        </div>
+
+      </div>
+    </div>
+
+  </body>
+</html>

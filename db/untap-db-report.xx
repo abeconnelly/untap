@@ -1,6 +1,10 @@
 
 -- human locator pairs
 
+/*
+
+-- data soley in uploaded_data
+
 drop table if exists human_record_locator;
 create table human_record_locator (
   id integer primary key,
@@ -13,6 +17,7 @@ create table human_record_locator (
 create index human_record_locator_huid_idx on human_record_locator (human_id);
 create index human_record_locator_loc_idx on human_record_locator (locator);
 create index human_record_locator_huid_loc_idx on human_record_locator (human_id, locator);
+*/
 
 
 -- sufficient records
@@ -47,24 +52,24 @@ create index insuff_record_idx on insuff_record (json_record);
 drop table if exists human_suff_record_map;
 create table human_suff_record_map (
   id integer primary key,
-  human_id varchar(255),
-  suff_record_index varchar(255)
+  uploaded_data_id integer,
+  suff_record_index integer
 );
 drop table if exists foo;
 create table foo (
-  human_id varchar(255),
-  suff_record_index varchar(255)
+  uploaded_data_id integer,
+  suff_record_index integer
 );
 .separator "\t"
 .import "ge-suff-hu-map.tsv" foo
-insert into human_suff_record_map(human_id, suff_record_index) select human_id, suff_record_index from foo where human_id != 'human_id';
+insert into human_suff_record_map(uploaded_data_id, suff_record_index) select uploaded_data_id, suff_record_index from foo where uploaded_data_id != 'uploaded_data_id';
 drop table foo;
 
 
 -- .separator "\t"
 -- .import "ge-suff-hu-map.tsv" human_suff_record_map
 
-create index human_suff_record_idx on human_suff_record_map (human_id);
+create index human_suff_record_idx on human_suff_record_map (uploaded_data_id);
 create index human_suff_record_2_idx on human_suff_record_map (suff_record_index);
 
 
@@ -74,19 +79,19 @@ create index human_suff_record_2_idx on human_suff_record_map (suff_record_index
 drop table if exists human_insuff_record_map;
 create table human_insuff_record_map (
   id integer primary key,
-  human_id varchar(255),
-  insuff_record_index varchar(255)
+  uploaded_data_id integer,
+  insuff_record_index integer
 );
 
 drop table if exists foo;
 create table foo (
-  human_id varchar(255),
-  insuff_record_index varchar(255)
+  uploaded_data_id integer,
+  insuff_record_index integer
 );
 .separator "\t"
 .import "ge-insuff-hu-map.tsv" foo
-insert into human_insuff_record_map(human_id, insuff_record_index) select human_id, insuff_record_index from foo where human_id != 'human_id';
+insert into human_insuff_record_map(uploaded_data_id, insuff_record_index) select uploaded_data_id, insuff_record_index from foo;
 drop table foo;
 
-create index human_insuff_record_idx on human_insuff_record_map (human_id);
+create index human_insuff_record_idx on human_insuff_record_map (uploaded_data_id);
 create index human_insuff_record_2_idx on human_insuff_record_map (insuff_record_index);
