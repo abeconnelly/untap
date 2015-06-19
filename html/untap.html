@@ -24,6 +24,10 @@
     <script src='js/untap-bargraph.js'></script>
     <script src='js/untap-bargraph-grouped.js'></script>
 
+    <script src='js/distance.js'></script>
+    <script src='js/kmeans.js'></script>
+    <script src='js/hcluster.js'></script>
+
   </head>
 
   <body>
@@ -198,7 +202,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="#">untap</a>
+          <a class="navbar-brand" href="#">Harvard Personal Genome Project Consolodated Database</a>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
 
@@ -222,38 +226,34 @@
         <div class="col-sm-3 col-md-2 sidebar">
 
           <ul class="nav nav-sidebar">
-            <li class="active"><a href="#">bargraph<span class="sr-only">(current)</span></a></li>
-            <li><a href="#">bargraph / stacked</a></li>
-            <li><a href="#">bargraph / grouped</a></li>
+            <li class="active"><a href="#">Summary<span class="sr-only">(current)</span></a></li>
           </ul>
 
           <ul class="nav nav-sidebar">
-            <li><a href="">donut</a></li>
-            <li><a href="">donut / multiple</a></li>
-          </ul>
-
-          <ul class="nav nav-sidebar">
-            <li><a href="">matrix</a></li>
+            <li><a href="">Variants</a></li>
           </ul>
 
         </div>
 
         <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-          <h1 class='page-header'>untap</h1>
+          <h1 class='page-header'>Harvard Personal Genome Project Consolodated Database</h1>
 
           <div class='btn-group'>
             <button type='button' class='btn btn-default dropdown-toggle' data-toggle='dropdown' aria-haspopup="true" aria-expanded="false">
-              Group by<span class="caret"></span>
+              Summary<span class="caret"></span>
             </button>
             <ul class="dropdown-menu">
               <li><a href="#" onclick="plot_survey_bargraph('Sex/Gender');" >Sex/Gender</a></li>
               <li><a href="#" onclick="plot_survey_bargraph('Race/ethnicity');" >Race/ethnicity</a></li>
               <li><a href="#" onclick="plot_survey_bargraph('Age');" >Age</a></li>
               <li><a href="#" onclick="plot_survey_bargraph('Year of birth');" >Year of birth</a></li>
-              <li><a href="#" onclick="plot_uploaded_data_summary();" >Uploaded data summary</a></li>
-              <li><a href="#">Something else here</a></li>
+              <li><a href="#" onclick="plot_simple_bargraph('allergies', 'name', 50);" >Allergies</a></li>
+              <li><a href="#" onclick="plot_simple_bargraph('conditions', 'name', 50);" >Conditions</a></li>
+              <li><a href="#" onclick="plot_simple_bargraph('immunizations', 'name', 50);" >Immunizations</a></li>
+              <li><a href="#" onclick="plot_simple_bargraph('medications', 'name', 50);" >Medications</a></li>
+              <li><a href="#" onclick="plot_simple_bargraph('procedures', 'name', 50);" >Procedures</a></li>
               <li role="separator" class="divider"></li>
-              <li><a href="#">Separated link</a></li>
+              <li><a href="#" onclick="plot_uploaded_data_summary();" >Uploaded data summary</a></li>
             </ul>
           </div>
 

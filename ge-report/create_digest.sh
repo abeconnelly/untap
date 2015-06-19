@@ -8,8 +8,8 @@ mkdir -p out-data
 #echo "variant_impact,allele_freq,autoscore,clinical,evidence,name,suff_eval,variant_impact,zygosity,expect_effect" > $of_suff
 #echo "variant_impact,allele_freq,autoscore,clinical,evidence,name,suff_eval,variant_impact,zygosity,expect_effect" > $of_insuff
 
-echo "json_report" > $of_suff
-echo "json_report" > $of_insuff
+#echo "json_report" > $of_suff
+#echo "json_report" > $of_insuff
 
 for j in `find data -type f`
 do

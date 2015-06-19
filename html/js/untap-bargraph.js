@@ -1,8 +1,7 @@
 
 
-function bargraph(DATA, label) {
+function bargraph(DATA, label, alt_label) {
 
-  //var margin = {top: 20, right: 20, bottom: 30, left: 40},
   var margin = {top: 30, right: 40, bottom: 280, left: 50},
       width = 900 - margin.left - margin.right,
       height = 800 - margin.top - margin.bottom;
@@ -24,29 +23,27 @@ function bargraph(DATA, label) {
       .scale(y)
       .orient("left")
       .ticks(10);
-      //.ticks(10, "%");
 
   var y1Axis = d3.svg.axis()
       .scale(y1)
       .orient("right")
       .ticks(10);
 
-
   d3.select("svg").remove();
-
   var svg = d3.select("#graph").append("svg")
       .attr("width", width + margin.left + margin.right)
       .attr("height", height + margin.top + margin.bottom)
     .append("g")
       .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-  //var bargraph_type = function type(d) { d.frequency = +d.frequency; return d; };
   var bargraph_type = function type(d) { d.y = +d.y; return d; };
 
   var bargraph_load = function(data, y_label, y1_label) {
 
     y_label = ( (typeof y_label === "undefined") ? "y-label" : y_label );
-    y1_label = ( (typeof y1_label === "undefined") ? "Percentage" : y1_label );
+
+    var show_y1_label = false;
+    if (typeof y1_label !== "undefined") { show_y1_label = true; }
 
     x.domain(data.map(function(d) { return d.x; }));
     y.domain([0, d3.max(data, function(d) { return d.y; })]);
@@ -54,7 +51,9 @@ function bargraph(DATA, label) {
     var y0max = d3.max(data, function(d) { return d.y; });
     var y0sum = d3.sum(data, function(d) { return d.y; });
 
-    y1.domain([0, y0max/y0sum]);
+    if (show_y1_label) {
+      y1.domain([0, y0max/y0sum]);
+    }
 
     svg.append("g")
         .attr("class", "x axis")
@@ -77,16 +76,18 @@ function bargraph(DATA, label) {
         .style("text-anchor", "end")
         .text(y_label);
 
-    svg.append("g")
-        .attr("class", "y axis")
-        .attr("transform", "translate(" + (width+10) + ")")
-        .call(y1Axis)
-      .append("text")
-        .attr("transform", "rotate(-90)")
-        .attr("y", -16)
-        .attr("dy", ".71em")
-        .style("text-anchor", "end")
-        .text(y1_label);
+    if (show_y1_label) {
+      svg.append("g")
+          .attr("class", "y axis")
+          .attr("transform", "translate(" + (width+10) + ")")
+          .call(y1Axis)
+        .append("text")
+          .attr("transform", "rotate(-90)")
+          .attr("y", -16)
+          .attr("dy", ".71em")
+          .style("text-anchor", "end")
+          .text(y1_label);
+    }
 
 
     svg.selectAll(".bar")
@@ -98,15 +99,46 @@ function bargraph(DATA, label) {
         .attr("y", function(d) { return y(d.y); })
         .attr("height", function(d) { return height - y(d.y); });
 
-  };
-  bargraph_load(transform_data(DATA), label);
 
+    //WIP
+    /*
+    var zoom = d3.behavior.zoom()
+      .scaleExtent([1,1])
+      .x(x);
+
+    // http://computationallyendowed.com/blog/2013/01/21/bounded-panning-in-d3.html
+    zoom.on('zoom', function() {
+      var t= zoom.translate();
+      var tx = t[0];
+      var ty = t[1];
+      tx = Math.min(tx, 0);
+      tx = Mat.max(tx, width-max);
+      svg.select('.data').attr('d', line);
+    });
+    svg.call(zoom);
+    */
+
+
+  };
+
+
+
+  bargraph_load(transform_data(DATA), label, alt_label);
+
+}
+
+function plot_simple_bargraph(table, field, limit) {
+  var limit_str = "";
+  if (typeof limit !== "undefined") { limit_str = " limit " + limit ; }
+  var sql_data = g_db.exec("select count(human_id) y, " + field + " x from " + table + " group by x order by y desc  " + limit_str );
+  var xy = format_sqlite_result(sql_data);
+  bargraph(xy, "Frequency");
 }
 
 function plot_survey_bargraph(field) {
   var sql_data = g_db.exec("select count(human_id) y, phenotype x from survey where phenotype_category = 'Participant_Survey:" + field + "' group by x order by x");
   var xy = format_sqlite_result(sql_data);
-  bargraph(xy, "Frequency");
+  bargraph(xy, "Frequency", "Percentage");
 }
 
 function plot_uploaded_data_summary() {
@@ -119,6 +151,6 @@ function plot_uploaded_data_summary() {
       xy_filtered.push(xy_raw[i]);
     }
   }
-  bargraph(xy_filtered, "Frequency");
+  bargraph(xy_filtered, "Frequency", "Percentage");
 }
 

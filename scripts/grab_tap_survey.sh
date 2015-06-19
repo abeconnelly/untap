@@ -17,7 +17,7 @@ set -o pipefail
 STAGING_DIR="stage"
 OUTPUT_DIR="out-data"
 
-URL="https://my.pgp-hms.org"
+#URL="https://my.pgp-hms.org"
 
 mkdir -p $STAGING_DIR
 mkdir -p $OUTPUT_DIR
@@ -31,9 +31,12 @@ do
 
   echo "$clean_name $link"
 
-  wget -q "$URL/$link" -O $STAGING_DIR/$clean_name.csv
+  #wget -q "$URL/$link" -O $STAGING_DIR/$clean_name.csv
+  wget -q "$link" -O $STAGING_DIR/$clean_name.csv
 
-done < <( wget -q "$URL/google_surveys" -O - | xml2json | jq -c '.html.body.div[0].div[2].table.tbody.tr[] | { "name" : .td[0].a["#text"], "dl" : .td[5].a["@href"] }' )
+#done < <( wget -q "$URL/google_surveys" -O - | xml2json | jq -c '.html.body.div[0].div[2].table.tbody.tr[] | { "name" : .td[0].a["#text"], "dl" : .td[5].a["@href"] }' )
+done < survey_location.json
+
 
 mv stage/PGP_Trait_Disease_Survey_2012_Endocrine,_Metabolic,_Nutritional,_and_Immunity.csv stage/PGP_Trait_Disease_Survey_2012_Endocrine_Metabolic_Nutritional_and_Immunity.csv
 
