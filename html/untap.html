@@ -19,14 +19,96 @@
     <script src="js/gunzip.min.js"></script>
     <script src="js/sql.js"></script>
     <script src="js/d3.min.js"></script>
+    <script src="js/palette.js"></script>
 
     <script src='js/untap.js'></script>
     <script src='js/untap-bargraph.js'></script>
     <script src='js/untap-bargraph-grouped.js'></script>
+    <script src='js/untap-matrix.js'></script>
 
     <script src='js/distance.js'></script>
     <script src='js/kmeans.js'></script>
     <script src='js/hcluster.js'></script>
+
+  <style>
+      /* disable text selection */
+      svg *::selection {
+         background : transparent;
+      }
+
+      svg *::-moz-selection {
+         background:transparent;
+      }
+
+      svg *::-webkit-selection {
+         background:transparent;
+      }
+      rect.selection {
+        stroke          : #333;
+        stroke-dasharray: 4px;
+        stroke-opacity  : 0.5;
+        fill            : transparent;
+      }
+
+      rect.cell-border {
+        stroke: #eee;
+        stroke-width:0.3px;
+      }
+
+      rect.cell-selected {
+        stroke: rgb(51,102,153);
+        stroke-width:0.5px;
+      }
+
+      rect.cell-hover {
+        stroke: #F00;
+        stroke-width:0.3px;
+      }
+
+      text.mono {
+        font-size: 9pt;
+        font-family: Consolas, courier;
+        fill: #aaa;
+      }
+
+      text.text-selected {
+        fill: #000;
+      }
+
+      text.text-highlight {
+        fill: #c00;
+      }
+      text.text-hover {
+        fill: #00C;
+      }
+      #tooltip {
+        position: absolute;
+        width: 200px;
+        height: auto;
+        padding: 10px;
+        background-color: white;
+        -webkit-border-radius: 10px;
+        -moz-border-radius: 10px;
+        border-radius: 10px;
+        -webkit-box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4);
+        -moz-box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4);
+        box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4);
+        pointer-events: none;
+      }
+
+      #tooltip.hidden {
+        display: none;
+      }
+
+      #tooltip p {
+        margin: 0;
+        font-family: sans-serif;
+        font-size: 12px;
+        line-height: 20px;
+      }
+    </style>
+
+<div id="tooltip" class="hidden" style='z-index:100;'> <p><span id="value"></p> </div>
 
   </head>
 
@@ -38,7 +120,7 @@
         <div class="modal-content">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title" id="schemaModalLabel">Database Schema</h4>
+            <h4 class="modal-title" id="schemaModalLabel">Database Schema Quick Reference</h4>
           </div>
           <div class="modal-body">
 
@@ -70,8 +152,8 @@
             <hr />
 
             <div class='row'>
-              <div class='col-sm-6'> <b>allergies</b> </div> 
-              <div class='col-sm-6'> <b>conditions</b> </div> 
+              <div class='col-sm-6'> <b>allergies</b> </div>
+              <div class='col-sm-6'> <b>conditions</b> </div>
             </div>
 
             <div class='row'>
@@ -89,7 +171,7 @@
             <br/>
 
             <div class='row'>
-              <div class='col-sm-6'> <b>demographics</b> </div> 
+              <div class='col-sm-6'> <b>demographics</b> </div>
               <div class='col-sm-6'> <b>immunizations</b> </div>
             </div>
 
@@ -129,7 +211,7 @@
 
             <div class='row'>
               <div class='col-sm-6'> <b>test_results</b> </div>
-              <div class='col-sm-6'> </div> 
+              <div class='col-sm-6'> </div>
             </div>
 
             <div class='row'>
@@ -202,7 +284,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="#">Harvard Personal Genome Project Consolodated Database</a>
+          <a class="navbar-brand" href="#">Harvard Personal Genome Project Consolidated Database</a>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
 
@@ -210,7 +292,7 @@
           <ul class="nav navbar-nav navbar-right">
             <li>
             <a href='#'>
-              <button type="button" class="btn btn-sm" data-toggle="modal" data-target="#schemaModal"> Schema </button>
+              <button type="button" class="btn btn-sm" data-toggle="modal" data-target="#schemaModal"> Schema Quick Reference </button>
             </a>
             </li>
           </ul>
@@ -225,42 +307,175 @@
       <div class="row">
         <div class="col-sm-3 col-md-2 sidebar">
 
-          <ul class="nav nav-sidebar">
-            <li class="active"><a href="#">Summary<span class="sr-only">(current)</span></a></li>
-          </ul>
-
-          <ul class="nav nav-sidebar">
-            <li><a href="">Variants</a></li>
+          <ul class="nav nav-sidebar" id='tabs' data-tabs='tabs'>
+            <li class="active"><a href="#tab-description" data-toggle="tab">Overview<span class="sr-only">(current)</span></a></li>
+            <li><a href="#tab-bargraph" data-toggle="tab">Summary</a></li>
+            <li><a href="#tab-variant-matrix" data-toggle="tab">Variants</a></li>
+            <li><a href="#tab-custom-query" data-toggle="tab">Custom</a></li>
           </ul>
 
         </div>
 
         <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-          <h1 class='page-header'>Harvard Personal Genome Project Consolodated Database</h1>
 
-          <div class='btn-group'>
-            <button type='button' class='btn btn-default dropdown-toggle' data-toggle='dropdown' aria-haspopup="true" aria-expanded="false">
-              Summary<span class="caret"></span>
-            </button>
-            <ul class="dropdown-menu">
-              <li><a href="#" onclick="plot_survey_bargraph('Sex/Gender');" >Sex/Gender</a></li>
-              <li><a href="#" onclick="plot_survey_bargraph('Race/ethnicity');" >Race/ethnicity</a></li>
-              <li><a href="#" onclick="plot_survey_bargraph('Age');" >Age</a></li>
-              <li><a href="#" onclick="plot_survey_bargraph('Year of birth');" >Year of birth</a></li>
-              <li><a href="#" onclick="plot_simple_bargraph('allergies', 'name', 50);" >Allergies</a></li>
-              <li><a href="#" onclick="plot_simple_bargraph('conditions', 'name', 50);" >Conditions</a></li>
-              <li><a href="#" onclick="plot_simple_bargraph('immunizations', 'name', 50);" >Immunizations</a></li>
-              <li><a href="#" onclick="plot_simple_bargraph('medications', 'name', 50);" >Medications</a></li>
-              <li><a href="#" onclick="plot_simple_bargraph('procedures', 'name', 50);" >Procedures</a></li>
-              <li role="separator" class="divider"></li>
-              <li><a href="#" onclick="plot_uploaded_data_summary();" >Uploaded data summary</a></li>
-            </ul>
-          </div>
+          <div class='tab-content'>
 
-          <div id='graph'></div>
+            <div class='tab-pane active' id='tab-description'>
+
+              <h1>Consolidated Database for the Harvard PGP</h1>
+
+              <p>
+              In order to facilitate ease of access, some of the information available through <a href="https://my.pgp-hms.org">Harvard Personal Genome Project</a>
+              page and the <a href="https://evidence.pgp-hms.org">GET-Evidence</a> site has been consolidated into a small SQLite database (~120Mb uncompressed).
+
+              This is a web page front end that gives some canned visualizations of the data and allows you to create your own.
+
+              This website, along with the data files it uses, resides in an Arvados collection.  Feel free to <a href='../'>browse the contents</a>.
+              </p>
+
+
+              <p>
+              The Harvard PGP SQLite database is available here:
+              </p>
+
+              <p>
+              <div style='text-align:center;'>
+
+
+              <a href='../hu-pgp.sqlite3.gz' class='btn btn-info btn-lg'>
+                    <span class='glyphicon glyphicon-cloud-download' aria-hidden='true'></span> hu-pgp.sqlite3.gz
+              </a>
+
+              </div>
+              </p>
+
+              <p>
+
+              For convenience, the individual tables are also available as tab-separated text files that can be downloaded individually:
+
+              <ul>
+<li><a href="../allergies.tsv">allergies.tsv</a></li>
+<li><a href="../conditions.tsv">conditions.tsv</a></li>
+<li><a href="../demographics.tsv">demographics.tsv</a></li>
+<li><a href="../ge-insuff-hu-map.tsv">ge-insuff-hu-map.tsv</a></li>
+<li><a href="../ge-insuff.tsv">ge-insuff.tsv</a></li>
+<li><a href="../ge-suff-hu-map.tsv">ge-suff-hu-map.tsv</a></li>
+<li><a href="../ge-suff.tsv">ge-suff.tsv</a></li>
+<li><a href="../human-report-map.tsv">human-report-map.tsv</a></li>
+<li><a href="../immunizations.tsv">immunizations.tsv</a></li>
+<li><a href="../medications.tsv">medications.tsv</a></li>
+<li><a href="../procedures.tsv">procedures.tsv</a></li>
+<li><a href="../survey.tsv">survey.tsv</a></li>
+<li><a href="../test_results.tsv">test_results.tsv</a></li>
+<li><a href="../uploaded_data.tsv">uploaded_data.tsv</a></li>
+              </ul>
+              </p>
+
+
+              <p>
+              There are participant surveys available through <a href='https://my.pgp-hms.org/google_surveys'>Personal Genome Project website</a> but they've been collected here for convenience as well:
+
+
+<ul>
+<li><a href="../2011_PGP10_CAGI_Survey.csv">2011_PGP10_CAGI_Survey.csv</a></li>
+<li><a href="../PGP_Participant_Survey.csv">PGP_Participant_Survey.csv</a></li>
+<li><a href="../PGP_Trait_Disease_Survey_2012_Blood.csv">PGP_Trait_Disease_Survey_2012_Blood.csv</a></li>
+<li><a href="../PGP_Trait_Disease_Survey_2012_Cancers.csv">PGP_Trait_Disease_Survey_2012_Cancers.csv</a></li>
+<li><a href="../PGP_Trait_Disease_Survey_2012_Circulatory_System.csv">PGP_Trait_Disease_Survey_2012_Circulatory_System.csv</a></li>
+<li><a href="../PGP_Trait_Disease_Survey_2012_Congenital_Traits_and_Anomalies.csv">PGP_Trait_Disease_Survey_2012_Congenital_Traits_and_Anomalies.csv</a></li>
+<li><a href="../PGP_Trait_Disease_Survey_2012_Digestive_System.csv">PGP_Trait_Disease_Survey_2012_Digestive_System.csv</a></li>
+<li><a href="../PGP_Trait_Disease_Survey_2012_Endocrine_Metabolic_Nutritional_and_Immunity.csv">PGP_Trait_Disease_Survey_2012_Endocrine_Metabolic_Nutritional_and_Immunity.csv</a></li>
+<li><a href="../PGP_Trait_Disease_Survey_2012_Genitourinary_Systems.csv">PGP_Trait_Disease_Survey_2012_Genitourinary_Systems.csv</a></li>
+<li><a href="../PGP_Trait_Disease_Survey_2012_Musculoskeletal_System_and_Connective_Tissue.csv">PGP_Trait_Disease_Survey_2012_Musculoskeletal_System_and_Connective_Tissue.csv</a></li>
+<li><a href="../PGP_Trait_Disease_Survey_2012_Nervous_System.csv">PGP_Trait_Disease_Survey_2012_Nervous_System.csv</a></li>
+<li><a href="../PGP_Trait_Disease_Survey_2012_Respiratory_System.csv">PGP_Trait_Disease_Survey_2012_Respiratory_System.csv</a></li>
+<li><a href="../PGP_Trait_Disease_Survey_2012_Skin_and_Subcutaneous_Tissue.csv">PGP_Trait_Disease_Survey_2012_Skin_and_Subcutaneous_Tissue.csv</a></li>
+<li><a href="../PGP_Trait_Disease_Survey_2012_Vision_and_hearing.csv">PGP_Trait_Disease_Survey_2012_Vision_and_hearing.csv</a></li>
+</ul>
+
+              </p>
+
+
+              <p>
+              The schema for the SQLite database is split between two files and is available as well:
+
+<ul>
+<li><a href='../db/untap-db.sql'>SQLite Schema</a></li>
+<li><a href='../db/untap-db-report.sql'>SQLite Schema</a></li>
+</ul>
+              </p>
+
+            </div>
+
+            <div class='tab-pane' id='tab-bargraph'>
+
+              <script>
+              function demographics_plot(type)  {
+
+                if (type==0) {
+                } else if (type==1) {
+                } else if (type==2) {
+                } else if (type==3) {
+                }
+
+              }
+              </script>
+
+              <div class='btn-group'>
+                <h1>Summary Information</h1>
+                <button type='button' class='btn btn-default dropdown-toggle' data-toggle='dropdown' aria-haspopup="true" aria-expanded="false">
+                  Summary<span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu">
+                  <li><a href="#" onclick="plot_survey_bargraph('Sex/Gender', 'Sex/Gender');" >Sex/Gender</a></li>
+                  <li><a href="#" onclick="plot_survey_bargraph('Race/ethnicity', 'Race/ethnicity');" >Race/ethnicity</a></li>
+                  <li><a href="#" onclick="plot_survey_bargraph('Age', 'Age');" >Age</a></li>
+                  <li><a href="#" onclick="plot_survey_bargraph('Year of birth', 'Year of birth');" >Year of birth</a></li>
+                  <li><a href="#" onclick="plot_simple_bargraph('demographics', 'blood_type', 50, 'Blood Type');" >Bloodtype</a></li>
+                  <li><a href="#" onclick="plot_simple_bargraph('demographics', 'race', 50, 'Race');" >Race (Demographics)</a></li>
+                  <li><a href="#" onclick="plot_simple_bargraph('allergies', 'name', 50, 'Allergies');" >Allergies (top 50)</a></li>
+                  <li><a href="#" onclick="plot_simple_bargraph('conditions', 'name', 50, 'Conditions');" >Conditions (top 50)</a></li>
+                  <li><a href="#" onclick="plot_simple_bargraph('immunizations', 'name', 50, 'Immunizations');" >Immunizations (top 50)</a></li>
+                  <li><a href="#" onclick="plot_simple_bargraph('medications', 'name', 50, 'Medications');" >Medications (top 50)</a></li>
+                  <li><a href="#" onclick="plot_simple_bargraph('procedures', 'name', 50, 'Procedures');" >Procedures (top 50)</a></li>
+                  <li role="separator" class="divider"></li>
+                  <li><a href="#" onclick='plot_survey_bargraph_grouped({"primary": "Age","secondary":"Sex/Gender","secondary_restrict":["Male","Female"]}, "Sex/Gender by Age");' >Age grouped by gender</a></li>
+                  <li><a href="#" onclick='plot_survey_bargraph_grouped({"primary": "Year of birth","secondary":"Sex/Gender","secondary_restrict":["Male","Female"]}, "Sex/Gender by Year of Birth");' >Year of birth grouped by gender</a></li>
+                  <li><a href="#" onclick='plot_race_bloodtype_grouped_bargraph();' >Bloodtype by race</a></li>
+                  <li role="separator" class="divider"></li>
+                  <li><a href="#" onclick="plot_uploaded_data_summary();" >Uploaded data</a></li>
+                </ul>
+              </div>
+
+              <div id='graph'></div>
+            </div>
+
+            <div class='tab-pane' id='tab-variant-matrix'>
+              <h1>Subject/Variant</h1>
+
+              <div class='btn-group'>
+                <button type='button' class='btn btn-default dropdown-toggle' data-toggle='dropdown'>
+                  Examples<span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu">
+                  <li><a href="#" onclick="suff_eval_matrix_example();" >Example 1 (suff. eval filter)</a></li>
+                  <li><a href="#" onclick="pathogenic_matrix_example();" >Example 2 (pathogenic filter)</a></li>
+                </ul>
+              </div>
+
+              <div id='graph-matrix'></div>
+
+            </div> <!-- tabpanel -->
+
+            <div class='tab-pane' id='tab-custom-query'>
+              <h1>Custom Query</h1>
+              <div id='graph-custom'></div>
+            </div> <!-- tabpanel -->
+
+          </div> <!-- tab-content -->
+
         </div>
 
-      </div>
     </div>
 
   </body>

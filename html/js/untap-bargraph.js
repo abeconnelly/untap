@@ -1,6 +1,6 @@
 
 
-function bargraph(DATA, label, alt_label) {
+function bargraph(DATA, label, alt_label, title) {
 
   var margin = {top: 30, right: 40, bottom: 280, left: 50},
       width = 900 - margin.left - margin.right,
@@ -46,6 +46,7 @@ function bargraph(DATA, label, alt_label) {
     if (typeof y1_label !== "undefined") { show_y1_label = true; }
 
     x.domain(data.map(function(d) { return d.x; }));
+    //x.domain(data.map(function(d) { if ((typeof d.x === "undefined") || (d.x=="")) { return "(none specified)"; }  return d.x; }));
     y.domain([0, d3.max(data, function(d) { return d.y; })]);
 
     var y0max = d3.max(data, function(d) { return d.y; });
@@ -53,6 +54,15 @@ function bargraph(DATA, label, alt_label) {
 
     if (show_y1_label) {
       y1.domain([0, y0max/y0sum]);
+    }
+
+    if (typeof title !== "undefined") {
+      svg.append("text")
+        .attr("x", (width/2))
+        .attr("y", 0 - (margin.top/2))
+        .attr("text-anchor", "middle")
+        .style("font-size", "16px")
+        .text(title)
     }
 
     svg.append("g")
@@ -127,18 +137,28 @@ function bargraph(DATA, label, alt_label) {
 
 }
 
-function plot_simple_bargraph(table, field, limit) {
+function plot_simple_bargraph(table, field, limit, title) {
   var limit_str = "";
   if (typeof limit !== "undefined") { limit_str = " limit " + limit ; }
   var sql_data = g_db.exec("select count(human_id) y, " + field + " x from " + table + " group by x order by y desc  " + limit_str );
   var xy = format_sqlite_result(sql_data);
-  bargraph(xy, "Frequency");
+
+  for (var i=1; i<xy.length; i++) {
+    if (xy[i][1]=="") { xy[i][1] = "(non specified)"; }
+  }
+
+  bargraph(xy, "Frequency", undefined, title);
 }
 
-function plot_survey_bargraph(field) {
+function plot_survey_bargraph(field, title) {
   var sql_data = g_db.exec("select count(human_id) y, phenotype x from survey where phenotype_category = 'Participant_Survey:" + field + "' group by x order by x");
   var xy = format_sqlite_result(sql_data);
-  bargraph(xy, "Frequency", "Percentage");
+
+  for (var i=1; i<xy.length; i++) {
+    if (xy[i][1]=="") { xy[i][1] = "(non specified)"; }
+  }
+
+  bargraph(xy, "Frequency", "Percentage", title);
 }
 
 function plot_uploaded_data_summary() {
@@ -151,6 +171,6 @@ function plot_uploaded_data_summary() {
       xy_filtered.push(xy_raw[i]);
     }
   }
-  bargraph(xy_filtered, "Frequency", "Percentage");
+  bargraph(xy_filtered, "Frequency", "Percentage", "Uploaded Data");
 }
 

@@ -1,5 +1,5 @@
 
-function bargraph_grouped(DATA, label) {
+function bargraph_grouped(DATA, label, title) {
 
   var margin = {top: 30, right: 40, bottom: 280, left: 50},
       width = 900 - margin.left - margin.right,
@@ -13,8 +13,11 @@ function bargraph_grouped(DATA, label) {
   var y = d3.scale.linear()
       .range([height, 0]);
 
-  var color = d3.scale.ordinal()
-      .range(["#98abc5", "#8a89a6", "#7b6888", "#6b486b", "#a05d56", "#d0743c", "#ff8c00"]);
+  var tdata = transform_data(DATA);
+  var xNames_tmp = d3.keys(tdata[0]).filter(function(key) { return key !== "x"; });
+  var seq = color_palette(xNames_tmp.length);
+
+  var color = d3.scale.ordinal().range(seq);
 
   var xAxis = d3.svg.axis()
       .scale(x0)
@@ -46,6 +49,15 @@ function bargraph_grouped(DATA, label) {
     x0.domain(data.map(function(d) { return d.x; }));
     x1.domain(xNames).rangeRoundBands([0, x0.rangeBand()]);
     y.domain([0, d3.max(data, function(d) { return d3.max(d.ys, function(d) { return d.value; }); })]);
+
+    if (typeof title !== "undefined") {
+      svg.append("text")
+        .attr("x", (width/2))
+        .attr("y", 0 - (margin.top/2))
+        .attr("text-anchor", "middle")
+        .style("font-size", "16px")
+        .text(title)
+    }
 
     svg.append("g")
         .attr("class", "x axis")
@@ -219,7 +231,7 @@ function bargraph_grouped(DATA, label) {
 //   "secondary" : "Sex/Gender",
 //   "secondary_restrict" : [ "Male", "Female" ]
 // }
-function plot_survey_bargraph_grouped(query_json) {
+function plot_survey_bargraph_grouped(query_json, title) {
 
   primary_field = query_json.primary;
   var prim_group = [];
@@ -261,20 +273,25 @@ function plot_survey_bargraph_grouped(query_json) {
 
   var sql_data = g_db.exec(query.join(" "))
   var xyy = format_sqlite_result(sql_data, group_label);
-  bargraph_grouped(xyy, "Frequency");
+  bargraph_grouped(xyy, "Frequency", title);
 }
 
-/*
-function plot_uploaded_data_summary() {
-  var sql_data = g_db.exec("select count(human_id) y, data_type x from uploaded_data group by data_type order by y desc");
-  var xy_raw = format_sqlite_result(sql_data);
-  var xy_filtered = [];
-  xy_filtered.push(xy_raw[0]);
-  for (var i=0; i<xy_raw.length; i++) {
-    if (xy_raw[i][0] > 1) {
-      xy_filtered.push(xy_raw[i]);
-    }
+
+function plot_race_bloodtype_grouped_bargraph() {
+  var bloodtype = [ "O+", "O-", "A+", "A-", "B+", "B-", "AB+", "AB-" ];
+  var query = ["select p.race x" ];
+  var group_label = {};
+  for (var i=0; i<bloodtype.length; i++) {
+    query.push( ", sum( p.blood_type = '" + bloodtype[i] + "') y" + i );
+    group_label[ "y" + i ] = bloodtype[i];
   }
-  bargraph_grouped(xy_filtered, "Frequency");
+
+  // The 'Caucasian (White)' category I don't think is used.  There is a 'White' category
+  // instead?
+  //
+  query.push("from demographics p where race != '' and race != 'Caucasian (White)' group by x")
+
+  var sql_data = g_db.exec(query.join(" "))
+  var xyy = format_sqlite_result(sql_data, group_label);
+  bargraph_grouped(xyy, "Frequency", "Bloodtype by Race");
 }
-*/

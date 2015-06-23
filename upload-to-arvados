@@ -1,0 +1,28 @@
+#!/bin/bash
+#
+# assumes ARVADOS_API_TOKEN and ARVADOS_API_HOST is set
+
+project_uuid=`jq -r '.["public-database-project"].uuid' $HOME/.config/arvados/config.json`
+
+echo "# uploading to project: $project_uuid"
+
+rm -rf arv-stage
+
+mkdir -p arv-stage
+cd arv-stage
+
+ln -s ../html .
+ln -s ../db .
+
+for x in `ls ../out-data`
+do
+  echo $x
+  ln -s ../out-data/$x .
+done
+
+mv untap.sqlite3.gz hu-pgp.sqlite3.gz
+
+dtstr=`date +'%Y-%m-%d+%H:%M:%S'`
+arv-put --project-uuid $project_uuid --name HU-PGP-DB-$dtstr .
+
+cd ..

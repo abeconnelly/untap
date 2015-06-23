@@ -51,8 +51,6 @@ function init_untap() {
     if (max_rec_idx < suff_record_idx) { max_rec_idx = suff_record_idx; }
   }
 
-  console.log(max_rec_idx);
-
 
   var hu_ind = 0;
   var hu_pos = {};
@@ -71,7 +69,6 @@ function init_untap() {
     hu_vec.push(v_vec);
   }
 
-  console.log(hu_vec);
   g_hu_vec = hu_vec;
 
   var sql_data = g_db.exec("select id, json_record from insuff_record");
@@ -109,36 +106,42 @@ function init_untap() {
 
 
 
-  console.log(">>> init_untap done");
-
 
 
 }
 
 $(document).ready( function() {
 
+  // Use a web worker to load the SQL database so it
+  // doesn't drag everything to a halt.
+  //
+  var wurk = new Worker("js/untap-sql-worker.js");
+  wurk.addEventListener('message', function(e) {
+    var uintarray = e.data;
+    g_db = new SQL.Database(uintarray);
+  });
+
+
+  return;
+
+  /*
   var xhr = new XMLHttpRequest();
   xhr.open('GET', 'db/untap.sqlite3.gz', true);
   xhr.responseType = 'arraybuffer';
 
   xhr.onload = function(e) {
-    console.log(">>>ok", e);
-
 
     var uInt8Array = new Uint8Array(this.response);
     var gunzip = new Zlib.Gunzip(uInt8Array);
     var unpacked_uInt8Array = gunzip.decompress();
 
-
     g_db = new SQL.Database(unpacked_uInt8Array);
-
-    console.log(">>> database loaded....", g_db);
-
     init_untap();
 
   };
 
   xhr.send();
+  */
 
 });
 
@@ -194,3 +197,11 @@ function format_sqlite_result(data, group_label) {
 }
 
 
+// This uses google/palette.js.  We've abstracted it a bit
+// so we can swap out something else if we want to.
+//
+function color_palette(n) {
+  var seq = palette('tol', n);
+  for (var i=0; i<seq.length; i++) { seq[i] = "#" + seq[i]; }
+  return seq;
+}
