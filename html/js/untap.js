@@ -12,101 +12,73 @@ var g_insuff_stat = {};
 
 var g_hu_vec = [];
 
-function init_untap() {
 
+// Simple map of sample queries for each table.
+//
+var example_query_map = {
+  "survey" : "select * \nfrom survey limit 10",
+  "uploaded_data" : "select * from uploaded_data limit 10",
+  "allergies" : "select * from allergies limit 10",
+  "conditions" : "select * from conditions limit 10",
+  "demographics" : "select * from demographics limit 10",
+  "immunizations" : "select * from immunizations limit 10",
+  "medications" : "select * from medications limit 10",
+  "procedures" : "select * from procedures limit 10",
+  "test_results" : "select * from test_results limit 10",
+  "suff_record" : "select * from suff_record limit 10",
+  "human_suff_record_map" : "select * from human_suff_record_map limit 10",
+  "insuff_record" : "select * from insuff_record limit 10",
+  "human_insuff_record_map" : "select * from human_insuff_record_map limit 10",
+};
 
-  var sql_data = g_db.exec("select id, json_record from suff_record");
-  for (var ind=0; ind<sql_data[0].values.length; ind++) {
-    var id = sql_data[0].values[ind][0];
-    var rec = sql_data[0].values[ind][1];
+// Fill in the textarea 'example-textarea' with the sample query
+//
+function untap_example_query(table_name) {
+  var textarea = document.getElementById("example-textarea");
 
-    //HACK
-    if (rec == "json_report") continue;
-
-    g_suff_record[id] = JSON.parse(rec);
+  if (table_name in example_query_map) {
+    //textarea.innerHTML = example_query_map[table_name];
+    textarea.value = example_query_map[table_name];
+  } else {
+    //textarea.innerHTML = "/* sorry, not found */";
+    textarea.innerHTML = "/* sorry, not found */";
   }
+}
 
-  var max_rec_idx = 0;
 
-  var sql_data = g_db.exec("select u.human_id, r.id, r.uploaded_data_id, r.suff_record_index from uploaded_data u, human_suff_record_map r where r.uploaded_data_id = u.id");
-  for (var ind=0; ind<sql_data[0].values.length; ind++) {
-    var human_id = sql_data[0].values[ind][0];
-    var id = sql_data[0].values[ind][1];
-    var uploaded_data_id = sql_data[0].values[ind][2];
-    var suff_record_idx = sql_data[0].values[ind][3];
+// Create table of results from the results of the contents of
+// the 'example-textarea' text input.
+// Give an error as a 'span' label
+// on error.
+//
+function untap_exec_example_query() {
+  var textarea = document.getElementById("example-textarea");
+  var q = textarea.value;
 
-    if (!(human_id in g_suff_record_map)) {
-      g_suff_record_map[human_id] = {};
+  try {
+    var sql_data = g_db.exec(q);
+    var v = format_sqlite_result(sql_data);
+
+    var htable = ["<table class='table table-bordered'><tr>"];
+    for (var h=0; h<v[0].length; h++) {
+      htable.push("<th>" + v[0][h] + "</th>");
     }
+    htable.push("</tr>");
 
-    if (!(uploaded_data_id in g_suff_record_map[human_id])) {
-      g_suff_record_map[human_id][uploaded_data_id] = [];
-    }
-
-    g_suff_record_map[human_id][uploaded_data_id].push(suff_record_idx);
-
-    if (!(suff_record_idx in g_suff_stat)) { g_suff_stat[suff_record_idx] = 0; }
-    g_suff_stat[suff_record_idx]++;
-
-    if (max_rec_idx < suff_record_idx) { max_rec_idx = suff_record_idx; }
-  }
-
-
-  var hu_ind = 0;
-  var hu_pos = {};
-  var hu_vec = [];
-  for (var huid in g_suff_record_map) {
-    hu_pos[huid] = hu_ind;
-    hu_ind++;
-
-    var v_vec = [];
-    for (var i=0; i<max_rec_idx; i++) { v_vec.push(0); }
-    for (var upid in g_suff_record_map[huid]) {
-      for (var ii=0; ii<g_suff_record_map[huid][upid].length; ii++) {
-        v_vec[ g_suff_record_map[huid][upid][ii] ] = 1;
+    for (var r=1; r<v.length; r++) {
+      htable.push("<tr>");
+      for (var c=0; c<v[r].length; c++) {
+        htable.push("<td>" + v[r][c] + "</td>");
       }
+      htable.push("</tr>");
     }
-    hu_vec.push(v_vec);
+
+    $("#example-table-result").html(htable.join(""));
+  } catch (e) {
+    var html_err_msg = "<span class='label label-danger'>" + e.message + "</span>";
+    $("#example-table-result").html(html_err_msg);
+    return;
   }
-
-  g_hu_vec = hu_vec;
-
-  var sql_data = g_db.exec("select id, json_record from insuff_record");
-  for (var ind=0; ind<sql_data[0].values.length; ind++) {
-    var id = sql_data[0].values[ind][0];
-    var rec = sql_data[0].values[ind][1];
-
-    //HACK
-    if (rec == "json_report") continue;
-
-    g_insuff_record[id] = JSON.parse(rec);
-
-
-  }
-
-
-  // there are too many insuff records (1.7M) and it becomes unwieldy.
-  //
-  /*
-  var sql_data = g_db.exec("select u.human_id, r.id, r.uploaded_data_id, r.insuff_record_index from uploaded_data u, human_insuff_record_map r where r.uploaded_data_id = u.id");
-  for (var ind=0; ind<sql_data[0].values.length; ind++) {
-    var human_id = sql_data[0].values[ind][0];
-    var id = sql_data[0].values[ind][1];
-    var uploaded_data_id = sql_data[0].values[ind][2];
-    var insuff_record_idx = sql_data[0].values[ind][3];
-
-    //if (!(human_id in g_insuff_record_map)) { g_insuff_record_map[human_id] = {}; }
-    //if (!(uploaded_data_id in g_insuff_record_map[human_id])) { g_insuff_record_map[human_id][uploaded_data_id] = []; }
-    //g_insuff_record_map[human_id][uploaded_data_id].push(insuff_record_idx);
-
-    if (!(insuff_record_idx in g_insuff_stat)) { g_insuff_stat[insuff_record_idx] = 0; }
-    g_insuff_stat[insuff_record_idx]++;
-  }
-  */
-
-
-
-
 
 }
 
@@ -119,29 +91,16 @@ $(document).ready( function() {
   wurk.addEventListener('message', function(e) {
     var uintarray = e.data;
     g_db = new SQL.Database(uintarray);
+
+    plot_survey_bargraph('graph', 'Year of birth', 'Year of birth');
+
+    suff_eval_matrix_example('graph-matrix');
+
+    untap_custom_query(
+  "select p0.phenotype x,\n  sum( p1.phenotype = \"Male\") \"Male\", sum( p1.phenotype = \"Female\") \"Female\"\nfrom survey p0, survey p1\nwhere p0.phenotype_category = \"Participant_Survey:Age\" and p0.human_id = p1.human_id and p1.phenotype_category = \"Participant_Survey:Sex/Gender\"\ngroup by x"
+    );
+
   });
-
-
-  return;
-
-  /*
-  var xhr = new XMLHttpRequest();
-  xhr.open('GET', 'db/untap.sqlite3.gz', true);
-  xhr.responseType = 'arraybuffer';
-
-  xhr.onload = function(e) {
-
-    var uInt8Array = new Uint8Array(this.response);
-    var gunzip = new Zlib.Gunzip(uInt8Array);
-    var unpacked_uInt8Array = gunzip.decompress();
-
-    g_db = new SQL.Database(unpacked_uInt8Array);
-    init_untap();
-
-  };
-
-  xhr.send();
-  */
 
 });
 

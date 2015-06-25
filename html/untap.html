@@ -25,6 +25,7 @@
     <script src='js/untap-bargraph.js'></script>
     <script src='js/untap-bargraph-grouped.js'></script>
     <script src='js/untap-matrix.js'></script>
+    <script src='js/untap-custom.js'></script>
 
     <script src='js/distance.js'></script>
     <script src='js/kmeans.js'></script>
@@ -131,7 +132,7 @@
 
             <div class='row'>
               <div class='col-sm-6'>
-                <code>id</code>, <code>human_id</code>, <code>date</code>, <code>phenotype_category</code>, <code>phenotype</code>
+                <code>id</code> <code>human_id</code> <code>date</code> <code>phenotype_category</code> <code>phenotype</code>
               </div>
 
 
@@ -312,6 +313,10 @@
             <li><a href="#tab-bargraph" data-toggle="tab">Summary</a></li>
             <li><a href="#tab-variant-matrix" data-toggle="tab">Variants</a></li>
             <li><a href="#tab-custom-query" data-toggle="tab">Custom</a></li>
+            <li><br/><br/><br/></li>
+            <li><br/><br/><br/></li>
+            <li><a href="#tab-schema" data-toggle="tab">Schema</a></li>
+            <li><a href="#tab-examples" data-toggle="tab">Examples</a></li>
           </ul>
 
         </div>
@@ -427,23 +432,23 @@
                   Summary<span class="caret"></span>
                 </button>
                 <ul class="dropdown-menu">
-                  <li><a href="#" onclick="plot_survey_bargraph('Sex/Gender', 'Sex/Gender');" >Sex/Gender</a></li>
-                  <li><a href="#" onclick="plot_survey_bargraph('Race/ethnicity', 'Race/ethnicity');" >Race/ethnicity</a></li>
-                  <li><a href="#" onclick="plot_survey_bargraph('Age', 'Age');" >Age</a></li>
-                  <li><a href="#" onclick="plot_survey_bargraph('Year of birth', 'Year of birth');" >Year of birth</a></li>
-                  <li><a href="#" onclick="plot_simple_bargraph('demographics', 'blood_type', 50, 'Blood Type');" >Bloodtype</a></li>
-                  <li><a href="#" onclick="plot_simple_bargraph('demographics', 'race', 50, 'Race');" >Race (Demographics)</a></li>
-                  <li><a href="#" onclick="plot_simple_bargraph('allergies', 'name', 50, 'Allergies');" >Allergies (top 50)</a></li>
-                  <li><a href="#" onclick="plot_simple_bargraph('conditions', 'name', 50, 'Conditions');" >Conditions (top 50)</a></li>
-                  <li><a href="#" onclick="plot_simple_bargraph('immunizations', 'name', 50, 'Immunizations');" >Immunizations (top 50)</a></li>
-                  <li><a href="#" onclick="plot_simple_bargraph('medications', 'name', 50, 'Medications');" >Medications (top 50)</a></li>
-                  <li><a href="#" onclick="plot_simple_bargraph('procedures', 'name', 50, 'Procedures');" >Procedures (top 50)</a></li>
+                  <li><a href="#" onclick="plot_survey_bargraph('graph', 'Sex/Gender', 'Sex/Gender');" >Sex/Gender</a></li>
+                  <li><a href="#" onclick="plot_survey_bargraph('graph', 'Race/ethnicity', 'Race/ethnicity');" >Race/ethnicity</a></li>
+                  <li><a href="#" onclick="plot_survey_bargraph('graph', 'Age', 'Age');" >Age</a></li>
+                  <li><a href="#" onclick="plot_survey_bargraph('graph', 'Year of birth', 'Year of birth');" >Year of birth</a></li>
+                  <li><a href="#" onclick="plot_simple_bargraph('graph', 'demographics', 'blood_type', 50, 'Blood Type');" >Bloodtype</a></li>
+                  <li><a href="#" onclick="plot_simple_bargraph('graph', 'demographics', 'race', 50, 'Race');" >Race (Demographics)</a></li>
+                  <li><a href="#" onclick="plot_simple_bargraph('graph', 'allergies', 'name', 50, 'Allergies');" >Allergies (top 50)</a></li>
+                  <li><a href="#" onclick="plot_simple_bargraph('graph', 'conditions', 'name', 50, 'Conditions');" >Conditions (top 50)</a></li>
+                  <li><a href="#" onclick="plot_simple_bargraph('graph', 'immunizations', 'name', 50, 'Immunizations');" >Immunizations (top 50)</a></li>
+                  <li><a href="#" onclick="plot_simple_bargraph('graph', 'medications', 'name', 50, 'Medications');" >Medications (top 50)</a></li>
+                  <li><a href="#" onclick="plot_simple_bargraph('graph', 'procedures', 'name', 50, 'Procedures');" >Procedures (top 50)</a></li>
                   <li role="separator" class="divider"></li>
-                  <li><a href="#" onclick='plot_survey_bargraph_grouped({"primary": "Age","secondary":"Sex/Gender","secondary_restrict":["Male","Female"]}, "Sex/Gender by Age");' >Age grouped by gender</a></li>
-                  <li><a href="#" onclick='plot_survey_bargraph_grouped({"primary": "Year of birth","secondary":"Sex/Gender","secondary_restrict":["Male","Female"]}, "Sex/Gender by Year of Birth");' >Year of birth grouped by gender</a></li>
-                  <li><a href="#" onclick='plot_race_bloodtype_grouped_bargraph();' >Bloodtype by race</a></li>
+                  <li><a href="#" onclick='plot_survey_bargraph_grouped("graph", {"primary": "Age","secondary":"Sex/Gender","secondary_restrict":["Male","Female"]}, "Sex/Gender by Age");' >Age grouped by gender</a></li>
+                  <li><a href="#" onclick='plot_survey_bargraph_grouped("graph", {"primary": "Year of birth","secondary":"Sex/Gender","secondary_restrict":["Male","Female"]}, "Sex/Gender by Year of Birth");' >Year of birth grouped by gender</a></li>
+                  <li><a href="#" onclick='plot_race_bloodtype_grouped_bargraph("graph");' >Bloodtype by race</a></li>
                   <li role="separator" class="divider"></li>
-                  <li><a href="#" onclick="plot_uploaded_data_summary();" >Uploaded data</a></li>
+                  <li><a href="#" onclick="plot_uploaded_data_summary('graph');" >Uploaded data</a></li>
                 </ul>
               </div>
 
@@ -458,8 +463,8 @@
                   Examples<span class="caret"></span>
                 </button>
                 <ul class="dropdown-menu">
-                  <li><a href="#" onclick="suff_eval_matrix_example();" >Example 1 (suff. eval filter)</a></li>
-                  <li><a href="#" onclick="pathogenic_matrix_example();" >Example 2 (pathogenic filter)</a></li>
+                  <li><a href="#" onclick="suff_eval_matrix_example('graph-matrix');" >Example 1 (suff. eval filter)</a></li>
+                  <li><a href="#" onclick="pathogenic_matrix_example('graph-matrix');" >Example 2 (pathogenic filter)</a></li>
                 </ul>
               </div>
 
@@ -467,13 +472,489 @@
 
             </div> <!-- tabpanel -->
 
-            <!-- cripple for now.  We'll come back to it. -->
-<!-- 
             <div class='tab-pane' id='tab-custom-query'>
-              <h1>Custom Query</h1>
+              <h1>Custom Visualization</h1>
+
+              <p>
+              Each row should have an 'x' field followed by any number of 'y' fields.  The results will be grouped by each row.  See the examples on the lower right for some canned queries.
+              </p>
+
+              <div class='form-group'>
+                <textarea class='form-control' rows='6' id='custom-textarea'>??</textarea>
+              </div>
+
+              <div class='row'>
+
+                <div class='col-md-9'>
+                  <button class='btn btn-info' onclick='untap_custom_viz();'>Query</button>
+                </div>
+
+
+                <div class='col-md-3'>
+                  <div class='btn-group btn-group-xs' role='group'>
+                      <button type='button' class='btn btn-default' onclick='untap_custom_query("select count(human_id) \"Year of birth\",\n  phenotype x\nfrom survey\nwhere phenotype_category = \"Participant_Survey:Year of birth\" and\n  phenotype != \"\" and phenotype != \"No response\"\ngroup by x;");'>Year of birth example</button>
+                      <button type='button' class='btn btn-default' onclick='untap_custom_query(
+                        "select p.race x,\n  sum( p.blood_type = \"O+\") \"O+\", sum( p.blood_type = \"O-\") \"O-\",\n  sum( p.blood_type = \"A+\") \"A+\", sum( p.blood_type = \"A-\") \"A-\",\n  sum( p.blood_type = \"B+\") \"B+\", sum( p.blood_type = \"B-\") \"B-\", sum( p.blood_type = \"AB+\") \"AB+\", sum( p.blood_type = \"AB-\") \"AB-\"\nfrom demographics p\nwhere race != \"\" and race != \"Caucasian (White)\" group by x"
+                        );'>Bloodtype by race example</button>
+                      <button type='button' class='btn btn-default' onclick='untap_custom_query(
+"select p0.phenotype x,\n  sum( p1.phenotype = \"Male\") \"Male\", sum( p1.phenotype = \"Female\") \"Female\"\nfrom survey p0, survey p1\nwhere p0.phenotype_category = \"Participant_Survey:Age\" and p0.human_id = p1.human_id and p1.phenotype_category = \"Participant_Survey:Sex/Gender\"\ngroup by x"
+                        );'>Gender by age example </button>
+                  </div>
+                </div>
+
+              </div>
+
+
+
               <div id='graph-custom'></div>
+
+            </div> <!-- tabpanel -->
+
+
+
+            <div class='tab-pane' id='tab-schema'>
+              <h1>SQLite Database Schema</h1>
+
+<!-- schema table start -->
+
+<table class='table table-bordered'>
+  <tr>
+    <th style='width:25%;'><small>table</small></th>
+    <th style='width:40%;'><small>field</small></th>
+    <th style='width:25%;'><small>type</small></th>
+    <th style='width:10%;'><small>example</small></th>
+  </tr>
+
+  <tr>
+    <td rowspan='5'><b style='font-size:125%;'>survey</b></td>
+    <td><code>id</code></td>
+    <td><mark>int</mark></td>
+    <td><em>123</em></td>
+  </tr>
+  <tr>
+    <td><code>human_id</code></td>
+    <td><mark>string</mark></td>
+    <td><em>hu826751</em></td>
+  </tr>
+  <tr>
+    <td><code>date</code></td>
+    <td><mark>datetime</mark></td>
+    <td><em>2015-06-23 10:30:01</em></td>
+  </tr>
+  <tr>
+    <td><code>phenotype_category</code></td>
+    <td><mark>string</mark></td>
+    <td><em>Participant_Survey:Age</em></td>
+  </tr>
+  <tr>
+    <td><code>phenotype</code></td>
+    <td><mark>string</mark></td>
+    <td><em>30-39 years </em></td>
+  </tr>
+
+  <tr>
+    <td rowspan='10'><b style='font-size:125%;'>uploaded_data</b></td>
+    <td><code>id</code></td>
+    <td><mark>int</mark></td>
+    <td><em>123</em></td>
+  </tr>
+  <tr>
+    <td><code>human_id</code></td>
+    <td><mark>string</mark></td>
+    <td><em>hu826751</em></td>
+  </tr>
+  <tr>
+    <td><code>date</code></td>
+    <td><mark>string</mark></td>
+    <td><em>2015-06-23 10:30:01</em></td>
+  </tr>
+  <tr>
+    <td><code>data_type</code></td>
+    <td><mark>string</mark></td>
+    <td><em>Complete Genomics</em></td>
+  </tr>
+  <tr>
+    <td><code>source</code></td>
+    <td><mark>string</mark></td>
+    <td><em>PGP</em></td>
+  </tr>
+  <tr>
+    <td><code>name</code></td>
+    <td><mark>string</mark></td>
+    <td><em>CGI sample: GS03052-DNA_B01</em></td>
+  </tr>
+  <tr>
+    <td><code>download_description</code></td>
+    <td><mark>string</mark></td>
+    <td><em>(101.3 MB)</em></td>
+  </tr>
+  <tr>
+    <td><code>download_url</code></td>
+    <td><mark>string</mark></td>
+    <td><em>http://evidence.pgp-hms.org/genome_download.php?download_genome_id=8e2fb8975d5a05735c56505e1697ad1fa1df73ab&amp;amp;download_nickname=CGI+sample%3A+GS03052-DNA_B01</em></td>
+  </tr>
+  <tr>
+    <td><code>report_description</code></td>
+    <td><mark>string</mark></td>
+    <td><em>male 2,743,807,495 positions covered ref. b37</em></td>
+  </tr>
+  <tr>
+    <td><code>report_url</code></td>
+    <td><mark>string</mark></td>
+    <td><em>http://evidence.pgp-hms.org/genomes?display_genome_id=8e2fb8975d5a05735c56505e1697ad1fa1df73ab</em></td>
+  </tr>
+
+  <tr>
+    <td rowspan='6'><b style='font-size:125%;'>allergies</b></td>
+    <td><code>id</code></td>
+    <td><mark>int</mark></td>
+    <td><em>123</em></td>
+  </tr>
+  <tr>
+    <td><code>human_id</code></td>
+    <td><mark>string</mark></td>
+    <td><em>hu826751</em></td>
+  </tr>
+  <tr>
+    <td><code>name</code></td>
+    <td><mark>string</mark></td>
+    <td><em>Honey Bee Venom Protein</em></td>
+  </tr>
+  <tr>
+    <td><code>severity</code></td>
+    <td><mark>string</mark></td>
+    <td><em>MILD</em></td>
+  </tr>
+  <tr>
+    <td><code>start_date</code></td>
+    <td><mark>string</mark></td>
+    <td><em>2000-08-01</em></td>
+  </tr>
+  <tr>
+    <td><code>end_date</code></td>
+    <td><mark>string</mark></td>
+    <td><em>2010-05-01</em></td>
+  </tr>
+
+  <tr>
+    <td rowspan='5'><b style='font-size:125%;'>conditions</b></td>
+    <td><code>id</code></td>
+    <td><mark>int</mark></td>
+    <td><em>123</em></td>
+  </tr>
+  <tr>
+    <td><code>human_id</code></td>
+    <td><mark>string</mark></td>
+    <td><em>hu826751</em></td>
+  </tr>
+  <tr>
+    <td><code>name</code></td>
+    <td><mark>string</mark></td>
+    <td><em>Chest Pain</em></td>
+  </tr>
+  <tr>
+    <td><code>start_date</code></td>
+    <td><mark>string</mark></td>
+    <td><em>2001-08-06</em></td>
+  </tr>
+  <tr>
+    <td><code>end_date</code></td>
+    <td><mark>string</mark></td>
+    <td><em>2010-03-01</em></td>
+  </tr>
+
+  <tr>
+    <td rowspan='8'><b style='font-size:125%;'>demographics</b></td>
+    <td><code>id</code></td>
+    <td><mark>int</mark></td>
+    <td><em>123</em></td>
+  </tr>
+  <tr>
+    <td><code>human_id</code></td>
+    <td><mark>string</mark></td>
+    <td><em>hu826751</em></td>
+  </tr>
+  <tr>
+    <td><code>date_of_birth</code></td>
+    <td><mark>string</mark></td>
+    <td><em>1968-11-01 (46 years old)</em></td>
+  </tr>
+  <tr>
+    <td><code>gender</code></td>
+    <td><mark>string</mark></td>
+    <td><em>Female</em></td>
+  </tr>
+  <tr>
+    <td><code>weight</code></td>
+    <td><mark>string</mark></td>
+    <td><em>145lbs (66kg)</em></td>
+  </tr>
+  <tr>
+    <td><code>height</code></td>
+    <td><mark>string</mark></td>
+    <td><em>5ft 10in (177cm)</em></td>
+  </tr>
+  <tr>
+    <td><code>blood_type</code></td>
+    <td><mark>string</mark></td>
+    <td><em>A+</em></td>
+  </tr>
+  <tr>
+    <td><code>race</code></td>
+    <td><mark>string</mark></td>
+    <td><em>White</em></td>
+  </tr>
+
+  <tr>
+    <td rowspan='4'><b style='font-size:125%;'>immunizations</b></td>
+    <td><code>id</code></td>
+    <td><mark>int</mark></td>
+    <td><em>123</em></td>
+  </tr>
+  <tr>
+    <td><code>human_id</code></td>
+    <td><mark>string</mark></td>
+    <td><em>hu826751</em></td>
+  </tr>
+  <tr>
+    <td><code>name</code></td>
+    <td><mark>string</mark></td>
+    <td><em>Tetanus/Diphtheria/Pertussis (Tdap) Vaccine</em></td>
+  </tr>
+  <tr>
+    <td><code>date</code></td>
+    <td><mark>string</mark></td>
+    <td><em>2008-08-13</em></td>
+  </tr>
+
+  <tr>
+    <td rowspan='7'><b style='font-size:125%;'>medications</b></td>
+    <td><code>id</code></td>
+    <td><mark>int</mark></td>
+    <td><em>123</em></td>
+  </tr>
+  <tr>
+    <td><code>human_id</code></td>
+    <td><mark>string</mark></td>
+    <td><em>hu826751</em></td>
+  </tr>
+  <tr>
+    <td><code>name</code></td>
+    <td><mark>string</mark></td>
+    <td><em>Viibryd</em></td>
+  </tr>
+  <tr>
+    <td><code>dosage</code></td>
+    <td><mark>string</mark></td>
+    <td><em>50 Milligram (mg)</em></td>
+  </tr>
+  <tr>
+    <td><code>frequency</code></td>
+    <td><mark>string</mark></td>
+    <td><em>Take 1, 2 Times Daily</em></td>
+  </tr>
+  <tr>
+    <td><code>start_date</code></td>
+    <td><mark>string</mark></td>
+    <td><em>2013-01-01</em></td>
+  </tr>
+  <tr>
+    <td><code>end_date</code></td>
+    <td><mark>string</mark></td>
+    <td><em>2013-02-01</em></td>
+  </tr>
+
+  <tr>
+    <td rowspan='4'><b style='font-size:125%;'>procedures</b></td>
+    <td><code>id</code></td>
+    <td><mark>int</mark></td>
+    <td><em>123</em></td>
+  </tr>
+  <tr>
+    <td><code>human_id</code></td>
+    <td><mark>string</mark></td>
+    <td><em>hu826751</em></td>
+  </tr>
+  <tr>
+    <td><code>name</code></td>
+    <td><mark>string</mark></td>
+    <td><em>ELECTROCARDIOGRAM</em></td>
+  </tr>
+  <tr>
+    <td><code>date</code></td>
+    <td><mark>string</mark></td>
+    <td><em>2011-10-20</em></td>
+  </tr>
+
+  <tr>
+    <td rowspan='5'><b style='font-size:125%;'>test_results</b></td>
+    <td><code>id</code></td>
+    <td><mark>int</mark></td>
+    <td><em>123</em></td>
+  </tr>
+  <tr>
+    <td><code>human_id</code></td>
+    <td><mark>string</mark></td>
+    <td><em>hu826751</em></td>
+  </tr>
+  <tr>
+    <td><code>name</code></td>
+    <td><mark>string</mark></td>
+    <td><em>Height</em></td>
+  </tr>
+  <tr>
+    <td><code>result</code></td>
+    <td><mark>string</mark></td>
+    <td><em>77 inches</em></td>
+  </tr>
+  <tr>
+    <td><code>date</code></td>
+    <td><mark>string</mark></td>
+    <td><em>2009-07-01</em></td>
+  </tr>
+
+  <tr>
+    <td rowspan='2'><b style='font-size:125%;'>suff_record</b></td>
+    <td><code>id</code></td>
+    <td><mark>int</mark></td>
+    <td><em>123</em></td>
+  </tr>
+  <tr>
+    <td><code>json_record</code></td>
+    <td><mark>string</mark></td>
+    <td><em>["benign","0.000114142",4,"Low","Uncertain","OFD1-Q545R",true,"benign","Homozygous",-1]</em></td>
+  </tr>
+
+  <tr>
+    <td rowspan='3'><b style='font-size:125%;'>human_suff_record_map</b></td>
+    <td><code>id</code></td>
+    <td><mark>int</mark></td>
+    <td><em>123</em></td>
+  </tr>
+  <tr>
+    <td><code>uploaded_data_id</code></td>
+    <td><mark>int</mark></td>
+    <td><em>465</em></td>
+  </tr>
+  <tr>
+    <td><code>suff_record_index</code></td>
+    <td><mark>int</mark></td>
+    <td><em>89</em></td>
+  </tr>
+
+  <tr>
+    <td rowspan='2'><b style='font-size:125%;'>insuff_record</b></td>
+    <td><code>id</code></td>
+    <td><mark>int</mark></td>
+    <td><em>123</em></td>
+  </tr>
+  <tr>
+    <td><code>json_record</code></td>
+    <td><mark>string</mark></td>
+    <td><em>["","0.000",1,"","","ACOT2-M455V",false,"","Heterozygous",-1]</em></td>
+  </tr>
+
+  <tr>
+    <td rowspan='3'><b style='font-size:125%;'>human_insuff_record_map</b></td>
+    <td><code>id</code></td>
+    <td><mark>int</mark></td>
+    <td><em>123</em></td>
+  </tr>
+  <tr>
+    <td><code>uploaded_data_id</code></td>
+    <td><mark>int</mark></td>
+    <td><em>465</em></td>
+  </tr>
+  <tr>
+    <td><code>insuff_record_index</code></td>
+    <td><mark>int</mark></td>
+    <td><em>130</em></td>
+  </tr>
+
+</table>
+
+            </div> <!-- tabpanel -->
+            <!-- database schema -->
+
+            <script>
+
+
+
+            </script>
+
+            <div class='tab-pane' id='tab-examples'>
+              <h1>Query examples</h1>
+
+              <div class='col-md-6'>
+
+                <div class='btn-group btn-group-justified' role='group'>
+                  <div class='btn-group btn-group-xs' role='group'>
+                    <button type='button' class='btn btn-default' onclick='untap_example_query("survey");'>survey</button>
+                  </div>
+
+                  <div class='btn-group btn-group-xs' role='group'>
+                    <button type='button' class='btn btn-default' onclick='untap_example_query("uploaded_data");'>uploaded_data</button>
+                  </div>
+                </div>
+
+                <div class='btn-group btn-group-justified btn-group-xs' role='group'>
+                  <div class='btn-group btn-group-xs' role='group'>
+                    <button type='button' class='btn btn-default' onclick='untap_example_query("allergies");'>allergies</button>
+                  </div>
+                  <div class='btn-group btn-group-xs' role='group'>
+                    <button type='button' class='btn btn-default' onclick='untap_example_query("conditions");'>conditions</button>
+                  </div>
+                  <div class='btn-group btn-group-xs' role='group'>
+                    <button type='button' class='btn btn-default' onclick='untap_example_query("demographics");'>demographics</button>
+                  </div>
+                </div>
+
+
+                <div class='btn-group btn-group-justified btn-group-xs' role='group'>
+                  <div class='btn-group btn-group-xs' role='group'>
+                    <button type='button' class='btn btn-default' onclick='untap_example_query("immunizations");'>immunizations</button>
+                  </div>
+                  <div class='btn-group btn-group-xs' role='group'>
+                    <button type='button' class='btn btn-default' onclick='untap_example_query("medications");'>medications</button>
+                  </div>
+                  <div class='btn-group btn-group-xs' role='group'>
+                    <button type='button' class='btn btn-default' onclick='untap_example_query("procedures");'>procedures</button>
+                  </div>
+                  <div class='btn-group btn-group-xs' role='group'>
+                    <button type='button' class='btn btn-default' onclick='untap_example_query("test_results");'>test_results</button>
+                  </div>
+                </div>
+
+                <div class='btn-group btn-group-justified btn-group-sm' role='group'>
+                  <div class='btn-group btn-group-xs' role='group'>
+                    <button type='button' class='btn btn-default' onclick='untap_example_query("suff_record");'>suff_record</button>
+                  </div>
+                  <div class='btn-group btn-group-xs' role='group'>
+                    <button type='button' class='btn btn-default' onclick='untap_example_query("human_suff_record_map");'>human_suff_record_map</button>
+                  </div>
+                </div>
+
+                <div class='btn-group btn-group-justified' role='group'>
+                  <div class='btn-group btn-group-xs' role='group'>
+                    <button type='button' class='btn btn-default' onclick='untap_example_query("insuff_record");'>insuff_record</button>
+                  </div>
+                  <div class='btn-group btn-group-xs' role='group'>
+                    <button type='button' class='btn btn-default' onclick='untap_example_query("human_insuff_record_map");'>human_insuff_record_map</button>
+                  </div>
+                </div>
+
+                <div class='form-group'>
+                  <textarea class='form-control' rows='10' id='example-textarea'>select * from survey limit 10</textarea>
+                </div>
+                <button class='btn btn-info' onclick='untap_exec_example_query();'>Query</button>
+              </div>
+
+              <div class='col-md-6'>
+                <div id='example-table-result'>
+                </div>
+              </div>
+
             </div>
--->
 
           </div> <!-- tab-content -->
 
@@ -483,3 +964,5 @@
 
   </body>
 </html>
+
+

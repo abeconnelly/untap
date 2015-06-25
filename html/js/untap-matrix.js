@@ -1,5 +1,5 @@
 
-function pathogenic_matrix_example() {
+function pathogenic_matrix_example(graph_id) {
   var q = " select id, json_record " +
       " from suff_record where " +
       " (json_record like '%pathogenic%,3,%High%Well-established%' or json_record like '%pathogenic%,4,%High%Well-established%' or json_record like '%pathogenic%,5,%High%Well-established%' or json_record like '%pathogenic%,6,%High%Well-established%' ) " +
@@ -52,10 +52,10 @@ function pathogenic_matrix_example() {
     rcv_data.push({"row" : ridx+1, "col": cidx+1, "value": j_map[2]});
   }
 
-  plot_matrix(rcv_data, row_label, col_label);
+  plot_matrix(graph_id, rcv_data, row_label, col_label);
 }
 
-function suff_eval_matrix_example() {
+function suff_eval_matrix_example(graph_id) {
   var q = " select id, json_record " +
       " from suff_record where " +
       " (json_record like '%,4,%\"Likely\"%' or json_record like '%,5,%\"Likely\"%' or json_record like '%,6,%\"Likely\"%' ) " +
@@ -109,12 +109,12 @@ function suff_eval_matrix_example() {
     rcv_data.push({"row" : ridx+1, "col": cidx+1, "value": j_map[2]});
   }
 
-  plot_matrix(rcv_data, row_label, col_label);
+  plot_matrix(graph_id, rcv_data, row_label, col_label);
 }
 
 var debug_state = {};
 
-function plot_matrix(DATA, rowLabel, colLabel) {
+function plot_matrix(graph_id, DATA, rowLabel, colLabel) {
 
   var margin = { top: 250, right: 10, bottom: 50, left: 120 };
   var cellSize=12;
@@ -142,7 +142,10 @@ function plot_matrix(DATA, rowLabel, colLabel) {
         .domain([ -10 , 0, 10])
         .range(colors);
 
-    d3.select("svg").remove();
+    //d3.select("svg").remove();
+    d3.select("#" + graph_id).select("svg").remove();
+
+
     var svg = d3.select("#graph-matrix").append("svg")
         .attr("width", width + margin.left + margin.right)
         .attr("height", height + margin.top + margin.bottom)

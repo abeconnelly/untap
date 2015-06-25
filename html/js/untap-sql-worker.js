@@ -15,7 +15,6 @@ xhr.onload = function(e) {
   var gunzip = new Zlib.Gunzip(uInt8Array);
   var unpacked_uInt8Array = gunzip.decompress();
   g_self.postMessage(unpacked_uInt8Array);
-  //g_db = new SQL.Database(unpacked_uInt8Array);
 };
 
 xhr.send();

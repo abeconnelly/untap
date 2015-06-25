@@ -1,5 +1,5 @@
 
-function bargraph_grouped(DATA, label, title) {
+function bargraph_grouped(graph_id, DATA, label, title) {
 
   var margin = {top: 30, right: 40, bottom: 280, left: 50},
       width = 900 - margin.left - margin.right,
@@ -28,8 +28,10 @@ function bargraph_grouped(DATA, label, title) {
       .orient("left")
       .tickFormat(d3.format(".2s"));
 
-  d3.select("svg").remove();
-  var svg = d3.select("#graph").append("svg")
+  //d3.select("svg").remove();
+  d3.select("#" + graph_id).select("svg").remove();
+
+  var svg = d3.select("#" + graph_id).append("svg")
       .attr("width", width + margin.left + margin.right)
       .attr("height", height + margin.top + margin.bottom)
     .append("g")
@@ -39,8 +41,6 @@ function bargraph_grouped(DATA, label, title) {
     y_label = ( (typeof y_label === "undefined") ? "y-label" : y_label );
 
     var xNames = d3.keys(data[0]).filter(function(key) { return key !== "x"; });
-
-    console.log(xNames);
 
     data.forEach(function(d) {
       d.ys = xNames.map(function(name) { return {name: name, value: +d[name]}; });
@@ -231,9 +231,9 @@ function bargraph_grouped(DATA, label, title) {
 //   "secondary" : "Sex/Gender",
 //   "secondary_restrict" : [ "Male", "Female" ]
 // }
-function plot_survey_bargraph_grouped(query_json, title) {
+function plot_survey_bargraph_grouped(graph_id, query_json, title) {
 
-  primary_field = query_json.primary;
+  var primary_field = query_json.primary;
   var prim_group = [];
   if (primary_field["primary_restrict"] && (primary_field["primary_restrict"].length>0)) {
     var prim_group_sql = g_db.exec("select distinct phenotype from survey where phenotype_category = 'Participant_Survey:" + primary_field + "' order by phenotype");
@@ -263,21 +263,29 @@ function plot_survey_bargraph_grouped(query_json, title) {
   var group_label = {};
   var query = ["select p0.phenotype x"];
   for (var i=0; i<sec_group.length; i++) {
-    query.push( ", sum( p1.phenotype = '" + sec_group[i] + "') y" + i);
-    group_label[ "y" + i ] = sec_group[i];
+    if (i>0) {
+      query.push( ", sum( p1.phenotype = '" + sec_group[i] + "') y" + i);
+      group_label[ "y" + i ] = sec_group[i];
+    } else {
+      query.push( ", sum( p1.phenotype = '" + sec_group[i] + "') y");
+      group_label[ "y" ] = sec_group[i];
+    }
   }
   query.push("from survey p0, survey p1 where p0.phenotype_category = 'Participant_Survey:" + primary_field + "' and p0.human_id = p1.human_id and p1.phenotype_category = 'Participant_Survey:" + secondary_field + "' group by x");
+
+  //DEBUG
+  console.log(">>>", query.join(""));
 
   var q = query.join(" ");
 
 
   var sql_data = g_db.exec(query.join(" "))
   var xyy = format_sqlite_result(sql_data, group_label);
-  bargraph_grouped(xyy, "Frequency", title);
+  bargraph_grouped(graph_id, xyy, "Frequency", title);
 }
 
 
-function plot_race_bloodtype_grouped_bargraph() {
+function plot_race_bloodtype_grouped_bargraph(graph_id) {
   var bloodtype = [ "O+", "O-", "A+", "A-", "B+", "B-", "AB+", "AB-" ];
   var query = ["select p.race x" ];
   var group_label = {};
@@ -289,9 +297,9 @@ function plot_race_bloodtype_grouped_bargraph() {
   // The 'Caucasian (White)' category I don't think is used.  There is a 'White' category
   // instead?
   //
-  query.push("from demographics p where race != '' and race != 'Caucasian (White)' group by x")
+  query.push("from demographics p where race != '' and race != 'Caucasian (White)' group by x");
 
   var sql_data = g_db.exec(query.join(" "))
   var xyy = format_sqlite_result(sql_data, group_label);
-  bargraph_grouped(xyy, "Frequency", "Bloodtype by Race");
+  bargraph_grouped(graph_id, xyy, "Frequency", "Bloodtype by Race");
 }

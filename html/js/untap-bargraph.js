@@ -1,6 +1,5 @@
 
-
-function bargraph(DATA, label, alt_label, title) {
+function bargraph(graph_id, DATA, label, alt_label, title) {
 
   var margin = {top: 30, right: 40, bottom: 280, left: 50},
       width = 900 - margin.left - margin.right,
@@ -29,8 +28,12 @@ function bargraph(DATA, label, alt_label, title) {
       .orient("right")
       .ticks(10);
 
-  d3.select("svg").remove();
-  var svg = d3.select("#graph").append("svg")
+  //d3.select("svg").remove();
+  d3.select("#" + graph_id).select("svg").remove();
+
+
+  //var svg = d3.select("#graph").append("svg")
+  var svg = d3.select("#" + graph_id).append("svg")
       .attr("width", width + margin.left + margin.right)
       .attr("height", height + margin.top + margin.bottom)
     .append("g")
@@ -137,7 +140,7 @@ function bargraph(DATA, label, alt_label, title) {
 
 }
 
-function plot_simple_bargraph(table, field, limit, title) {
+function plot_simple_bargraph(graph_id, table, field, limit, title) {
   var limit_str = "";
   if (typeof limit !== "undefined") { limit_str = " limit " + limit ; }
   var sql_data = g_db.exec("select count(human_id) y, " + field + " x from " + table + " group by x order by y desc  " + limit_str );
@@ -147,10 +150,10 @@ function plot_simple_bargraph(table, field, limit, title) {
     if (xy[i][1]=="") { xy[i][1] = "(non specified)"; }
   }
 
-  bargraph(xy, "Frequency", undefined, title);
+  bargraph(graph_id, xy, "Frequency", undefined, title);
 }
 
-function plot_survey_bargraph(field, title) {
+function plot_survey_bargraph(graph_id, field, title) {
   var sql_data = g_db.exec("select count(human_id) y, phenotype x from survey where phenotype_category = 'Participant_Survey:" + field + "' group by x order by x");
   var xy = format_sqlite_result(sql_data);
 
@@ -158,10 +161,10 @@ function plot_survey_bargraph(field, title) {
     if (xy[i][1]=="") { xy[i][1] = "(non specified)"; }
   }
 
-  bargraph(xy, "Frequency", "Percentage", title);
+  bargraph(graph_id, xy, "Frequency", "Percentage", title);
 }
 
-function plot_uploaded_data_summary() {
+function plot_uploaded_data_summary(graph_id) {
   var sql_data = g_db.exec("select count(human_id) y, data_type x from uploaded_data group by data_type order by y desc");
   var xy_raw = format_sqlite_result(sql_data);
   var xy_filtered = [];
@@ -171,6 +174,6 @@ function plot_uploaded_data_summary() {
       xy_filtered.push(xy_raw[i]);
     }
   }
-  bargraph(xy_filtered, "Frequency", "Percentage", "Uploaded Data");
+  bargraph(graph_id, xy_filtered, "Frequency", "Percentage", "Uploaded Data");
 }
 
