@@ -80,4 +80,4 @@ sleepy() {
 export -f sleepy
 
 #parallel --max-procs=$BATCH para_download_link ::: `cat $listfn`
-parallel --max-procs=$BATCH para_download_link ::: `tail -n +2 $listfn`
+parallel --gnu --max-procs=$BATCH para_download_link ::: `tail -n +2 $listfn`
