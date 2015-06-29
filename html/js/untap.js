@@ -39,6 +39,7 @@ function untap_example_query(table_name) {
   if (table_name in example_query_map) {
     //textarea.innerHTML = example_query_map[table_name];
     textarea.value = example_query_map[table_name];
+    untap_exec_example_query();
   } else {
     //textarea.innerHTML = "/* sorry, not found */";
     textarea.innerHTML = "/* sorry, not found */";

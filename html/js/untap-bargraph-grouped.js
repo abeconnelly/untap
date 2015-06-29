@@ -273,9 +273,6 @@ function plot_survey_bargraph_grouped(graph_id, query_json, title) {
   }
   query.push("from survey p0, survey p1 where p0.phenotype_category = 'Participant_Survey:" + primary_field + "' and p0.human_id = p1.human_id and p1.phenotype_category = 'Participant_Survey:" + secondary_field + "' group by x");
 
-  //DEBUG
-  console.log(">>>", query.join(""));
-
   var q = query.join(" ");
 
 
