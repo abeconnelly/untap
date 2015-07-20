@@ -52,6 +52,7 @@ mv ge-report/out-data/* stage/
 #
 cd stage
 cat ../db/untap-db-report.sql | sqlite3 untap.db
+gzip -c untap.db > untap.sqlite3.gz
 cd ..
 
 # finally collect everythign into the out-data directory

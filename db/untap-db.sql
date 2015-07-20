@@ -11,6 +11,13 @@ create table survey (
   phenotype varchar(255)
 );
 
+create table foo (
+  human_id varchar(255),
+  date datetime,
+  phenotype_category varchar(255),
+  phenotype varchar(255)
+);
+
 .separator "\t"
 -- .import "out-data/survey.tsv" foo
 .import "survey.tsv" foo
