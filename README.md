@@ -63,3 +63,8 @@ This page gives the schema for the SQLite database provided.
 ![Schema](/img/schema_example_viz.png)
 
 This page gives some simple queries that allow you to explore the underlying tables that exist in the SQLite database.
+
+LICENSE
+---
+
+Source code is provided under AGPLv3.  All collected data from the Harvard Personal Genome Project is under CC0.
