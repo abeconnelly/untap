@@ -30,6 +30,7 @@ for row in reader:
 
   for r in row:
     z = re.sub("\n", "\\\\n", r)
+    z = re.sub("\t", "\\\\t", z)
     cur_row.append(z)
 
   if cur_count!=header_count:

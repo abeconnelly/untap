@@ -3,6 +3,8 @@
 # Download all reports
 #
 
+rm -rf data
+
 ./download_reports.sh huid_report_url.csv
 
 find data -type f > json_reports.list
