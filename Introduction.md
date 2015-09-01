@@ -1,3 +1,13 @@
+# Introduction
+
+Here's a quick introduction to what you can do with Untap. 
+
+What is Untap? We scraped the phenotypes in the Harvard Personal Genome Project and made it available in a small SQLite database, publicly available for anyone to download. We made a small webapp around the database where people can play around with the data directly in their browser.
+
+Webapp (first page has link to gzip of the database): http://curoverse.link/22d61dd43786c65cd175b04ad6954af0+3119/html/index.html 
+
+**Note: The website will take a few seconds to load the first time around.**
+
 ## Dataset
 <a href="http://www.orangenarwhals.com/wp-content/uploads/2015/08/011.png"><img class="alignnone wp-image-2055 size-medium" src="http://www.orangenarwhals.com/wp-content/uploads/2015/08/011-700x534.png" alt="" width="700" height="534" /></a>
 
