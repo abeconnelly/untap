@@ -9,7 +9,7 @@ Webapp (first page has link to gzip of the database): http://curoverse.link/22d6
 **Note: The website will take a few seconds to load the first time around.**
 
 ## Dataset
-<a href="http://www.orangenarwhals.com/wp-content/uploads/2015/08/011.png"><img class="alignnone wp-image-2055 size-medium" src="http://www.orangenarwhals.com/wp-content/uploads/2015/08/011-700x534.png" alt="" width="700" height="534" /></a>
+<a href="./img/011.png"><img src="./img/011.png" alt="" width="700" height="536" /></a>
 
 The dataset consists of people who have completed the enrollment process and were free to upload their own data for public release and also answer the surveys online (but not necessarily people who have donated samples, had the samples sequence, or had the samples released publicly).
 
