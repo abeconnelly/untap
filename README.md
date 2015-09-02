@@ -15,6 +15,46 @@ $ git clone https://github.com/abeconnelly/untap
 $ cd untap
 ```
 
+We need to run the application inside a server such as nginx.
+
+```bash
+$ sudo apt-get install nginx
+$ sudo /etc/init.d/nginx start
+$ mkdir /var/www
+$ sudo vi /etc/nginx/sites-enabled/untap
+	server {
+	  root /var/www;
+
+	  location / {
+	  }
+	}
+$ sudo ln -s /home/nrw/projects/untap /var/www/untap
+$ sudo chmod -R 777 /var/www/untap
+$ sudo nginx -s reloadu
+```
+
+Now we need to obtain a dataset. Either 1) download the snapshot provided at [the Untap hosted on Curoverse](http://curoverse.link/2210f7ee07fc1c8b926e5db28eff9635+3284/html/index.html) or 2) follow the instructions in the following section to scrape [Tapestry](http://my.pgp-hms.org) and build your own snapshot. In both cases, the database should be put in the root directory, i.e. `/untap/hu-pgp.sqlite3.gz`. 
+
+Now if you go to [Untap.html](./html/untap.html) you should see the application running and tabs such as "Summary" should show graphs when you select a dropdown option (e.g. "allergies"). 
+
+Updating the Database
+---
+
+The Quick start uses a static dump of the database and may not be up-to-date. To re-scrape all the data yourself for a more up-to-date copy, see the following instructions.
+
+You may need several dependencies if they're not installed already.
+
+```bash
+$ sudo apt-get install jq
+$ sudo add-apt-repository -y ppa:ethereum/ethereum
+$ sudo apt-get install golang
+$ mkdir -p ~/go; echo "export GOPATH=$HOME/go" >> ~/.bashrc
+$ echo "export PATH=$PATH:$HOME/go/bin:/usr/local/go/bin" >> ~/.bashrc
+$ source ~/.bashrc
+$ go get github.com/ericchiang/pup
+$ sudo apt-get install parallel
+```
+
 To download the database from `my.pgp-hms.org` and `evidence.pgp-hms.org` run:
 
 ```bash
@@ -28,6 +68,10 @@ $ ./upload-to-arvados
 ```
 
 Installing the `html` directory in the appropriate place will allow you to see the visualization.  Care needs to be taken to make sure the SQLite database file gets copied over properly.
+
+Guided Walkthrough
+---
+For a guided walkthrough of how to use this application, see [Introduction](./Introduction.md). 
 
 Visualization
 ---
