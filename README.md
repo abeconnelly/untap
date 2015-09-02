@@ -18,19 +18,21 @@ $ cd untap
 We need to run the application inside a server such as nginx.
 
 ```bash
+$ cd $HOME
 $ sudo apt-get install nginx
 $ sudo /etc/init.d/nginx start
 $ mkdir /var/www
-$ sudo vi /etc/nginx/sites-enabled/untap
+$ cat > /etc/nginx/sites-enabled/untap <<EOF
 	server {
 	  root /var/www;
 
 	  location / {
 	  }
 	}
-$ sudo ln -s /home/nrw/projects/untap /var/www/untap
+EOF
+$ sudo ln -s $HOME/untap /var/www/untap
 $ sudo chmod -R 777 /var/www/untap
-$ sudo nginx -s reloadu
+$ sudo nginx -s reload
 ```
 
 Now we need to obtain a dataset. Either 1) download the snapshot provided at [the Untap hosted on Curoverse](http://curoverse.link/2210f7ee07fc1c8b926e5db28eff9635+3284/html/index.html) or 2) follow the instructions in the following section to scrape [Tapestry](http://my.pgp-hms.org) and build your own snapshot. In both cases, the database should be put in the root directory, i.e. `/untap/hu-pgp.sqlite3.gz`. 
