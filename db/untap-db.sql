@@ -151,8 +151,6 @@ create table foo (
 .import demographics.tsv foo
 insert into demographics(human_id, date_of_birth, gender, weight, height, blood_type, race) select human_id, date_of_birth, gender, weight, height, blood_type, race from foo where human_id != 'human_id';
 
-
-
 -- immunizations
 
 drop table if exists immunizations;
@@ -227,8 +225,6 @@ create table foo (
 .import procedures.tsv foo
 insert into procedures(human_id, name, date) select human_id, name, date from foo where human_id != 'human_id';
 
-
-
 -- uploaded data
 
 drop table if exists uploaded_data;
@@ -263,3 +259,24 @@ create table foo (
 .import uploaded_data.tsv foo
 insert into uploaded_data(human_id, date, data_type, source, name, download_description, download_url, report_description, report_url) select human_id, date, data_type, source, name, download_description, download_url, report_description, report_url from foo where human_id != 'human_id';
 
+-- enrollment_date 
+
+drop table if exists enrollment_date;
+CREATE TABLE enrollment_date (
+   id integer primary key,
+   human_id varchar(255),
+   enrollment_date varchar(255)
+ );
+CREATE INDEX enrollment_date_human_id on enrollment_date (human_id);
+CREATE INDEX enrollment_date_enrollment_date on enrollment_date (enrollment_date);
+
+drop table if exists foo;
+
+create table foo (
+  human_id varchar(255),
+  enrollment_date varchar(255)
+);
+
+.separator ","
+.import enrollmentdate.csv foo
+insert into enrollment_date(human_id, enrollment_date) select human_id, enrollment_date from foo where human_id != 'human_id';
