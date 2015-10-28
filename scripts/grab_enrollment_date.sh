@@ -7,9 +7,11 @@
 #  Example contents:
 #  hu43860C,2010-11-20T19:58:47Z
 
+
 set -e
 set -o pipefail
 
+echo "Grabbing enrollment date data..."
 ofn1="scratch/hid.list"
 ofn2="scratch/enrolldate.list"
 ofn3="scratch/hid-enrolldate.list"
@@ -50,5 +52,7 @@ do
   #increment
   cur_start=`expr "$cur_start" "+" "$dn"`
 done
+
+echo "Done grabbing enrollment date data."
 
 exit 0
