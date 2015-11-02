@@ -35,7 +35,7 @@ echo "collecting into tsv files"
 #
 echo "grabbing enrollment dates"
 ./scripts/grab_enrollment_date.sh
-cp ./scratch/hid-enrolldate.list ./enrollmentdate.csv
+cp ./scratch/hid-enrolldate.list ./stage/enrollmentdate.csv
 echo "done grabbing enrollment dates"
 
 
@@ -76,7 +76,6 @@ cd ..
 echo "cleaning up into out-data directory"
 mv stage/* out-data/
 mv scratch/* out-data/
-mv ./enrollmentdate.csv out-data/
 
 mv ./db/untap.sqlite3.gz ./hu-pgp.sqlite3.gz
 echo "done"
