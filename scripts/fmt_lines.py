@@ -31,6 +31,22 @@ for row in reader:
   for r in row:
     z = re.sub("\n", "\\\\n", r)
     z = re.sub("\t", "\\\\t", z)
+    # Some fields start with a double quotes so we have to take special
+    # consideration.
+    #
+    # For example:
+    #
+    #   "Swimmers' shoulder"- rotator cuff tendonitis/ biceps tendonitis
+    #
+    # will be replaced with
+    #
+    #   """Swimmers'' shoulder""- rotator cuff tendonitis/ biceps tendonitis"
+    #
+
+    if re.match(r'^"', z):
+      z = re.sub(r'"', r'""', z)
+      z = re.sub(r"'", r"''", z)
+      z = '"' + z + '"'
     cur_row.append(z)
 
   if cur_count!=header_count:
