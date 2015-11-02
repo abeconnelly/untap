@@ -7,10 +7,12 @@ set -o pipefail
 
 mkdir -p stage
 mkdir -p out-data
+mkdir -p out-data/stage
+mkdir -p out-data/scratch
 
 # collect survey data
 #
-echo "collecting survey data"
+#echo "collecting survey data"
 ./scripts/grab_tap_survey.sh
 ./scripts/create_phenotype.py > stage/survey.tsv
 
@@ -74,8 +76,8 @@ cd ..
 # finally collect everything into the out-data directory
 #
 echo "cleaning up into out-data directory"
-mv stage/* out-data/
-mv scratch/* out-data/
+mv ./stage/untap.sqlite3.gz ./hu-pgp.sqlite3.gz
+#mv stage/* out-data/stage/
+#mv scratch/* out-data/scratch/
 
-mv ./db/untap.sqlite3.gz ./hu-pgp.sqlite3.gz
 echo "done"
