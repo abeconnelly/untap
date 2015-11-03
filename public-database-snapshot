@@ -12,7 +12,7 @@ mkdir -p out-data/scratch
 
 # collect survey data
 #
-#echo "collecting survey data"
+echo "collecting survey data"
 ./scripts/grab_tap_survey.sh
 ./scripts/create_phenotype.py > stage/survey.tsv
 
@@ -77,7 +77,7 @@ cd ..
 #
 echo "cleaning up into out-data directory"
 mv ./stage/untap.sqlite3.gz ./hu-pgp.sqlite3.gz
-#mv stage/* out-data/stage/
-#mv scratch/* out-data/scratch/
+mv stage/* out-data/stage/
+mv scratch/* out-data/scratch/
 
 echo "done"
