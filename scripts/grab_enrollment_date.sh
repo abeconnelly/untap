@@ -47,7 +47,7 @@ do
   echo $data | jq -r '.aaData[].enrolled' | egrep -v '^null$' >> $ofn2
 
   # zip columns together and put in third output file 
-  paste -d, $ofn1 $ofn2 >> $ofn3
+  paste $ofn1 $ofn2 >> $ofn3
 
   #increment
   cur_start=`expr "$cur_start" "+" "$dn"`

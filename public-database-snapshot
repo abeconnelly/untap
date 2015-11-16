@@ -40,7 +40,7 @@ then
   # scrape Tapestry for enrollment dates
   echo "grabbing enrollment dates"
   ./scripts/grab_enrollment_date.sh
-  cp ./scratch/hid-enrolldate.list ./stage/enrollmentdate.csv
+  cp ./scratch/hid-enrolldate.list ./stage/enrollmentdate.tsv
 
   # insert into the untap.db.  Use it to
   # generate the list of download urls for
@@ -90,7 +90,7 @@ then
   # finally collect everything into the out-data directory
   #
   echo "cleaning up into out-data directory"
-  cp ./stage/untap.sqlite3.gz ./hu-pgp.sqlite3.gz
+  ln -s ./hu-pgp.sqlite3.gz ./stage/untap.sqlite3.gz
   mv stage/* out-data/
 
 fi
