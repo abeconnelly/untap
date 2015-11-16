@@ -43,12 +43,6 @@ for row in reader:
     #   """Swimmers'' shoulder""- rotator cuff tendonitis/ biceps tendonitis"
     #
 
-    if re.match(r'^"', z):
-      z = re.sub(r'"', r'""', z)
-      z = re.sub(r"'", r"''", z)
-      z = '"' + z + '"'
-    cur_row.append(z)
-
   if cur_count!=header_count:
     overflow = True
   else:
