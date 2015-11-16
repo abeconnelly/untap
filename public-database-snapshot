@@ -2,82 +2,74 @@
 
 export PATH="$PATH:.:scripts"
 
+phenotype_step=true
+report_step=true
+
 set -e
 set -o pipefail
 
 mkdir -p stage
 mkdir -p out-data
-mkdir -p out-data/stage
-mkdir -p out-data/scratch
 
-# collect survey data
+if [ $phenotype_step = true ]
+then
+
+  # collect survey data
+  #
+  ./scripts/grab_tap_survey.sh
+  ./scripts/create_phenotype.py > stage/survey.tsv
+
+  # get user list
+  #
+  ./scripts/grab_user.sh
+
+  # scrape Tapestry for phenotype information
+  # and file locations
+  #
+  ./scripts/grab_profile_data.sh scratch/hid.list
+
+  # collection them into tsv files
+  #
+  ./scripts/collect_profile_data.py
+
+  # insert into the untap.db.  Use it to
+  # generate the list of download urls for
+  # the report collection step.
+  #
+  #cd stage
+  #cat ../db/untap-db.sql | sqlite3 untap.db
+  #echo "select id, human_id, report_url from uploaded_data where length(report_url)>0;" | sqlite3 untap.db > huid_report_url.csv
+  #cd ..
+
+  ./scripts/export_surveys_to_sqlite3.py ./stage/untap.db ./stage
+
+fi
+
+if [ $report_step = true  ]
+then
+  echo "select id, human_id, report_url from uploaded_data where length(report_url)>0;" | sqlite3 stage/untap.db > stage/huid_report_url.csv
+
+  # download, collect and de-duplicate the report data
+  # and insert into untap.db
+  #
+  mv stage/huid_report_url.csv ge-report
+  cd ge-report
+  ./generate
+  cd ..
+
+  # collect results from the report aggregation step.
+  #
+  mv ge-report/out-data/* stage/
+
+  # create final database
+  #
+  cd stage
+  cat ../db/untap-db-report.sql | sqlite3 untap.db
+  gzip -c untap.db > untap.sqlite3.gz
+  cd ..
+
+fi
+
+# finally collect everythign into the out-data directory
 #
-echo "collecting survey data"
-./scripts/grab_tap_survey.sh
-./scripts/create_phenotype.py > stage/survey.tsv
-
-# get user list
-#
-echo "getting user list"
-./scripts/grab_user.sh
-
-# scrape Tapestry for phenotype information
-# and file locations
-#
-echo "scraping tapestry for phenotype info"
-./scripts/grab_profile_data.sh scratch/hid.list
-
-
-# collect them into tsv files
-#
-echo "collecting into tsv files"
-./scripts/collect_profile_data.py
-
-# scrape tapestry for enrollment dates 
-#
-echo "grabbing enrollment dates"
-./scripts/grab_enrollment_date.sh
-cp ./scratch/hid-enrolldate.list ./stage/enrollmentdate.csv
-echo "done grabbing enrollment dates"
-
-
-# insert into the untap.db.  Use it to
-# generate the list of download urls for
-# the report collection step.
-#
-echo "inserting into untap.db"
-cd stage
-cat ../db/untap-db.sql | sqlite3 untap.db
-echo "select id, human_id, report_url from uploaded_data where length(report_url)>0;" | sqlite3 untap.db > huid_report_url.csv
-cd ..
-
-# download, collect and de-duplicate the report data
-# and insert into untap.db
-#
-echo "downloading report data"
-mv stage/huid_report_url.csv ge-report
-cd ge-report
-./generate
-cd ..
-
-# collect results from the report aggregation step.
-#
-echo "collecting results"
-mv ge-report/out-data/* stage/
-
-# create final database
-#
-echo "creating final database"
-cd stage
-cat ../db/untap-db-report.sql | sqlite3 untap.db
-gzip -c untap.db > untap.sqlite3.gz
-cd ..
-
-# finally collect everything into the out-data directory
-#
-echo "cleaning up into out-data directory"
-mv ./stage/untap.sqlite3.gz ./hu-pgp.sqlite3.gz
-mv stage/* out-data/stage/
-mv scratch/* out-data/scratch/
-
-echo "done"
+mv stage/* out-data/
