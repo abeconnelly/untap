@@ -40,7 +40,7 @@ then
   # scrape Tapestry for enrollment dates
   echo "grabbing enrollment dates"
   ./scripts/grab_enrollment_date.sh
-  cp ./scratch/hid-enrolldate.list ./stage/enrollmentdate.tsv
+  cp ./scratch/hid-enrolldate.list ./stage/enrollment_date.tsv
 
   # insert into the untap.db.  Use it to
   # generate the list of download urls for
