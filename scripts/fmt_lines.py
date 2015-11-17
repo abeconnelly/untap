@@ -31,6 +31,7 @@ for row in reader:
   for r in row:
     z = re.sub("\n", "\\\\n", r)
     z = re.sub("\t", "\\\\t", z)
+    cur_row.append(z)
     # Some fields start with a double quotes so we have to take special
     # consideration.
     #
