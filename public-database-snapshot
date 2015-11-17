@@ -90,7 +90,7 @@ then
   # finally collect everything into the out-data directory
   #
   echo "cleaning up into out-data directory"
-  ln -s ./hu-pgp.sqlite3.gz ./stage/untap.sqlite3.gz
+  ln -s ./stage/untap.sqlite3.gz ./hu-pgp.sqlite3.gz
   mv stage/* out-data/
 
 fi
