@@ -69,9 +69,9 @@ tables["uploaded_data"]["type"] = ["integer primary key", "varchar(255)", "varch
 tables["uploaded_data"]["idx"] = ["create index uploaded_data_idx on uploaded_data(human_id)"]
 
 tables["enrollment_date"] = {}
-tables["enrollment_date"]["name"] = {"id", "human_id", "enrollment_date"}
-tables["enrollment_date"]["type"] = {"integer primary key", "varchar(255)", "varchar(255)"}
-tables["enrollment_date"]["idx"] = {"create index enrollment_date_human_idx on enrollment_date (human_id)"}
+tables["enrollment_date"]["name"] = ["id", "human_id", "enrollment_date"]
+tables["enrollment_date"]["type"] = ["integer primary key", "varchar(255)", "varchar(255)"]
+tables["enrollment_date"]["idx"] = ["create index enrollment_date_human_idx on enrollment_date (human_id)"]
 
 
 def populate_table(curs, table, fn):
