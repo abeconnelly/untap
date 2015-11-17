@@ -22,7 +22,7 @@ do
   if [ ! -z "$z" ]
   then
 
-    # demogrpahics
+    # demographics
     cat $tdir/$huid.html | pup 'h3:contains("Demographic") + table tbody json{}' | jq -c '.[0].children[].children | [ .[0].text, .[1].text ] ' > $tdir/$huid.demographics
 
     # conditions

@@ -4,6 +4,7 @@ export PATH="$PATH:.:scripts"
 
 phenotype_step=true
 report_step=true
+clean_step=true
 
 set -e
 set -o pipefail
@@ -16,21 +17,30 @@ then
 
   # collect survey data
   #
+  echo "collecting survey data"
   ./scripts/grab_tap_survey.sh
   ./scripts/create_phenotype.py > stage/survey.tsv
 
   # get user list
   #
+  echo "getting user list"
   ./scripts/grab_user.sh
 
   # scrape Tapestry for phenotype information
   # and file locations
   #
+  echo "scraping tapestry for phenotype info"
   ./scripts/grab_profile_data.sh scratch/hid.list
 
-  # collection them into tsv files
+  # collect them into tsv files
   #
+  echo "collecting into tsv files"
   ./scripts/collect_profile_data.py
+
+  # scrape Tapestry for enrollment dates
+  echo "grabbing enrollment dates"
+  ./scripts/grab_enrollment_date.sh
+  cp ./scratch/hid-enrolldate.list ./stage/enrollment_date.tsv
 
   # insert into the untap.db.  Use it to
   # generate the list of download urls for
@@ -41,9 +51,11 @@ then
   #echo "select id, human_id, report_url from uploaded_data where length(report_url)>0;" | sqlite3 untap.db > huid_report_url.csv
   #cd ..
 
+  echo "inserting into untap.db"
   ./scripts/export_surveys_to_sqlite3.py ./stage/untap.db ./stage
 
 fi
+
 
 if [ $report_step = true  ]
 then
@@ -52,6 +64,7 @@ then
   # download, collect and de-duplicate the report data
   # and insert into untap.db
   #
+  echo "downloading report data"
   mv stage/huid_report_url.csv ge-report
   cd ge-report
   ./generate
@@ -59,10 +72,12 @@ then
 
   # collect results from the report aggregation step.
   #
+  echo "collecting results"
   mv ge-report/out-data/* stage/
 
   # create final database
   #
+  echo "creating final database"
   cd stage
   cat ../db/untap-db-report.sql | sqlite3 untap.db
   gzip -c untap.db > untap.sqlite3.gz
@@ -70,6 +85,12 @@ then
 
 fi
 
-# finally collect everythign into the out-data directory
-#
-mv stage/* out-data/
+if [ $clean_step = true  ]
+then
+  # finally collect everything into the out-data directory
+  #
+  echo "cleaning up into out-data directory"
+  ln -s ./stage/untap.sqlite3.gz ./hu-pgp.sqlite3.gz
+  mv stage/* out-data/
+
+fi
