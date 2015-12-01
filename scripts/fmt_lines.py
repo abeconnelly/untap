@@ -32,6 +32,17 @@ for row in reader:
     z = re.sub("\n", "\\\\n", r)
     z = re.sub("\t", "\\\\t", z)
     cur_row.append(z)
+    # Some fields start with a double quotes so we have to take special
+    # consideration.
+    #
+    # For example:
+    #
+    #   "Swimmers' shoulder"- rotator cuff tendonitis/ biceps tendonitis
+    #
+    # will be replaced with
+    #
+    #   """Swimmers'' shoulder""- rotator cuff tendonitis/ biceps tendonitis"
+    #
 
   if cur_count!=header_count:
     overflow = True
