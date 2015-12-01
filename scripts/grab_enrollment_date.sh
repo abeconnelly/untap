@@ -46,12 +46,12 @@ do
   # find enrollment dates and put them in second output file
   echo $data | jq -r '.aaData[].enrolled' | egrep -v '^null$' >> $ofn2
 
-  # zip columns together and put in third output file 
-  paste $ofn1 $ofn2 >> $ofn3
-
   #increment
   cur_start=`expr "$cur_start" "+" "$dn"`
 done
+
+# zip columns together and put in third output file
+paste $ofn1 $ofn2 >> $ofn3
 
 echo "Done grabbing enrollment date data."
 

@@ -89,6 +89,7 @@ if [ $clean_step = true  ]
 then
   # finally collect everything into the out-data directory
   #
+  rm -f ./hu-pgp.sqlite3.gz
   echo "cleaning up into out-data directory"
   ln -s ./stage/untap.sqlite3.gz ./hu-pgp.sqlite3.gz
   mv stage/* out-data/
