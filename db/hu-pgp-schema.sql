@@ -1,3 +1,4 @@
+-- deprecated, see untap-db.sql instead
 CREATE TABLE survey (
   id integer primary key,
   human_id varchar(255),
@@ -106,3 +107,11 @@ CREATE TABLE human_insuff_record_map (
 );
 CREATE INDEX human_insuff_record_idx on human_insuff_record_map (uploaded_data_id);
 CREATE INDEX human_insuff_record_2_idx on human_insuff_record_map (insuff_record_index);
+
+CREATE TABLE enrollment_date (
+  id integer primary key,
+  human_id varchar(255),
+  enrollment_date varchar(255)
+);
+CREATE INDEX enrollment_date_human_id on enrollment_date (human_id);
+CREATE INDEX enrollment_date_enrollment_date on enrollment_date (enrollment_date);
