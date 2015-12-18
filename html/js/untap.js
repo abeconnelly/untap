@@ -29,6 +29,7 @@ var example_query_map = {
   "human_suff_record_map" : "select * from human_suff_record_map limit 10",
   "insuff_record" : "select * from insuff_record limit 10",
   "human_insuff_record_map" : "select * from human_insuff_record_map limit 10",
+  "enrollment_date" : "select * from enrollment_date limit 10",
 };
 
 // Fill in the textarea 'example-textarea' with the sample query
