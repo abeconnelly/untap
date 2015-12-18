@@ -164,7 +164,7 @@
               </div>
 
               <div class="col-sm-6">
-                 <code>id</code> <code>human_id</code> <code>name</code> <code>start_date</code> <code>end_date</code>
+                <code>id</code> <code>human_id</code> <code>name</code> <code>start_date</code> <code>end_date</code>
               </div>
 
             </div>
@@ -173,55 +173,52 @@
 
             <div class='row'>
               <div class='col-sm-6'> <b>demographics</b> </div>
-              <div class='col-sm-6'> <b>immunizations</b> </div>
+        <div class='col-sm-6'> <b>enrollment_date</b> </div>
             </div>
 
+      <div class='row'>
+              <div class="col-sm-6">
+              <code>id</code>
+    <code>human_id</code>
+          <code>date_of_birth</code>
+          <code>gender</code>
+                <code>weight</code>
+                <code>height</code>
+                <code>blood_type</code>
+                <code>race</code> </div>  
+              <div class="col-sm-6">
+                <code>id</code> <code>human_id</code> <code>enrollment_date</code>            </div>
+            </div>
+
+             <br/>
+
             <div class='row'>
+            <div class='col-sm-6'> <b>immunizations</b> </div>
+            <div class='col-sm-6'> <b>medications</b> </div>
+            </div>
 
+
+            <div class='row'>
               <div class="col-sm-6">
-                 <code>id</code> <code>human_id</code> <code>date_of_birth</code> <code>gender</code> <code>weight</code> <code>height</code> <code>blood_type</code> <code>race</code>
-              </div>
-
+                 <code>id</code> <code>human_id</code> <code>name</code> <code>date</code> </div>
               <div class="col-sm-6">
-                 <code>id</code> <code>human_id</code> <code>name</code> <code>date</code>
-              </div>
-
+                 <code>id</code> <code>human_id</code> <code>name</code> <code>dosage</code> <code>frequency</code> <code>start_date</code> <code>end_date</code> </div>
             </div>
 
             <br/>
 
-
             <div class='row'>
-              <div class='col-sm-6'> <b>medications</b> </div>
               <div class='col-sm-6'> <b>procedures</b> </div>
+        <div class='col-sm-6'> <b>test_results</b> </div>
             </div>
 
             <div class='row'>
-              <div class="col-sm-6">
-                 <code>id</code> <code>human_id</code> <code>name</code> <code>dosage</code> <code>frequency</code> <code>start_date</code> <code>end_date</code>
-              </div>
 
               <div class="col-sm-6">
-                 <code>id</code> <code>human_id</code> <code>name</code> <code>date</code>
-              </div>
-
-            </div>
-
-            <br/>
-
-
-            <div class='row'>
-              <div class='col-sm-6'> <b>test_results</b> </div>
-              <div class='col-sm-6'> </div>
-            </div>
-
-            <div class='row'>
+                 <code>id</code> <code>human_id</code> <code>name</code> <code>date</code> </div>
 
               <div class="col-sm-6">
                  <code>id</code> <code>human_id</code> <code>name</code> <code>result</code> <code>date</code>
-              </div>
-
-              <div class="col-sm-6">
               </div>
 
             </div>
@@ -362,6 +359,7 @@
 <li><a href="../allergies.tsv">allergies.tsv</a></li>
 <li><a href="../conditions.tsv">conditions.tsv</a></li>
 <li><a href="../demographics.tsv">demographics.tsv</a></li>
+<li><a href="../enrollment_date.tsv">enrollment_date.tsv</a></li>
 <li><a href="../ge-insuff-hu-map.tsv">ge-insuff-hu-map.tsv</a></li>
 <li><a href="../ge-insuff.tsv">ge-insuff.tsv</a></li>
 <li><a href="../ge-suff-hu-map.tsv">ge-suff-hu-map.tsv</a></li>
@@ -713,6 +711,23 @@
   </tr>
 
   <tr>
+    <td rowspan='3'><b style='font-size:125%;'>enrollment_date</b></td>
+    <td><code>id</code></td>
+    <td><mark>int</mark></td>
+    <td><em>123</em></td>
+  </tr>
+  <tr>
+    <td><code>human_id</code></td>
+    <td><mark>string</mark></td>
+    <td><em>hu826751</em></td>
+  </tr>
+  <tr>
+    <td><code>enrollment_date</code></td>
+    <td><mark>string</mark></td>
+    <td><em>2009-07-01</em></td>
+  </tr>
+
+  <tr>
     <td rowspan='4'><b style='font-size:125%;'>immunizations</b></td>
     <td><code>id</code></td>
     <td><mark>int</mark></td>
@@ -915,7 +930,7 @@
                     <button type='button' class='btn btn-default' onclick='untap_example_query("demographics");'>demographics</button>
                   </div>
                   <div class='btn-group btn-group-xs' role='group'>
-                    <button type='button' class='btn btn-default' onclick='untap_example_query("enrollment_date");'>enrollment</button>
+                    <button type='button' class='btn btn-default' onclick='untap_example_query("enrollment_date");'>enrollment_date</button>
                   </div>
                 </div>
 
