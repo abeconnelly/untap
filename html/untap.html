@@ -231,15 +231,8 @@
             </div>
 
             <div class='row'>
-
-              <div class="col-sm-6">
-                 <code>id</code> <code>json_record</code>
-              </div>
-
-              <div class="col-sm-6">
-                 <code>id</code> <code>uploaded_data_id</code> <code>suff_record_index</code>
-              </div>
-
+              <div class="col-sm-6"> <code>id</code> <code>json_record</code> </div>
+              <div class="col-sm-6"> <code>id</code> <code>uploaded_data_id</code> <code>suff_record_index</code> </div>
             </div>
 
             <br/>
@@ -251,15 +244,30 @@
 
 
             <div class='row'>
+              <div class="col-sm-6"> <code>id</code> <code>json_record</code> </div> 
+              <div class="col-sm-6"> <code>id</code> <code>uploaded_data_id</code> <code>insuff_record_index</code> </div>
+            </div>
 
-              <div class="col-sm-6">
-                 <code>id</code> <code>json_record</code>
-              </div>
+            <hr />
 
-              <div class="col-sm-6">
-                 <code>id</code> <code>uploaded_data_id</code> <code>insuff_record_index</code>
-              </div>
+            <div class='row'>
+              <div class='col-sm-6'> <b>specimens</b> </div>
+              <div class='col-sm-6'> <b></b> </div>
+            </div>
 
+            <div class='row'>
+              <div class="col-sm-6"> <code>id</code> <code>human_id</code> <code>amount</code> </div>
+              <div class='col-sm-6'> <b></b> </div>
+            </div>
+
+            <div class='row'>
+              <div class="col-sm-6"> <code>material</code> <code>owner_researcher_affiliation</code>  </div>
+              <div class='col-sm-6'> <b></b> </div>
+            </div>
+
+            <div class='row'>
+              <div class="col-sm-6"> <code>study_name</code> <code>unit</code>  </div>
+              <div class='col-sm-6'> <b></b> </div>
             </div>
 
           </div>
@@ -368,6 +376,7 @@
 <li><a href="../immunizations.tsv">immunizations.tsv</a></li>
 <li><a href="../medications.tsv">medications.tsv</a></li>
 <li><a href="../procedures.tsv">procedures.tsv</a></li>
+<li><a href="../specimens.tsv">specimens.tsv</a></li>
 <li><a href="../survey.tsv">survey.tsv</a></li>
 <li><a href="../test_results.tsv">test_results.tsv</a></li>
 <li><a href="../uploaded_data.tsv">uploaded_data.tsv</a></li>
@@ -555,6 +564,48 @@
     <td><code>phenotype</code></td>
     <td><mark>string</mark></td>
     <td><em>30-39 years </em></td>
+  </tr>
+
+  <tr>
+    <td rowspan='7'><b style='font-size:125%;'>specimens</b></td>
+    <td><code>id</code></td>
+    <td><mark>int</mark></td>
+    <td><em>123</em></td>
+  </tr>
+  <tr>
+    <td><code>human_id</code></td>
+    <td><mark>string</mark></td>
+    <td><em>hu826751</em></td>
+  </tr>
+
+  <tr>
+    <td><code>amount</code></td>
+    <td><mark>string</mark></td>
+    <td><em>2 to 4</em></td>
+  </tr>
+
+  <tr>
+    <td><code>material</code></td>
+    <td><mark>string</mark></td>
+    <td><em>Whole Blood</em></td>
+  </tr>
+
+  <tr>
+    <td><code>owner_researcher_affiliation</code></td>
+    <td><mark>string</mark></td>
+    <td><em>Harvard University</em></td>
+  </tr>
+
+  <tr>
+    <td><code>study_name</code></td>
+    <td><mark>string</mark></td>
+    <td><em>PGP Blood Collection</em></td>
+  </tr>
+
+  <tr>
+    <td><code>unit</code></td>
+    <td><mark>string</mark></td>
+    <td><em>ml</em></td>
   </tr>
 
   <tr>
@@ -912,6 +963,10 @@
                 <div class='btn-group btn-group-justified' role='group'>
                   <div class='btn-group btn-group-xs' role='group'>
                     <button type='button' class='btn btn-default' onclick='untap_example_query("survey");'>survey</button>
+                  </div>
+
+                  <div class='btn-group btn-group-xs' role='group'>
+                    <button type='button' class='btn btn-default' onclick='untap_example_query("specimens");'>specimens</button>
                   </div>
 
                   <div class='btn-group btn-group-xs' role='group'>
