@@ -259,7 +259,7 @@ create table foo (
 .import uploaded_data.tsv foo
 insert into uploaded_data(human_id, date, data_type, source, name, download_description, download_url, report_description, report_url) select human_id, date, data_type, source, name, download_description, download_url, report_description, report_url from foo where human_id != 'human_id';
 
--- enrollment_date 
+-- enrollment_date
 
 drop table if exists enrollment_date;
 CREATE TABLE enrollment_date (
@@ -280,3 +280,39 @@ create table foo (
 .separator ","
 .import enrollmentdate.csv foo
 insert into enrollment_date(human_id, enrollment_date) select human_id, enrollment_date from foo where human_id != 'human_id';
+
+
+-- specimens
+
+drop table if exists specimens;
+CREATE TABLE specimens (
+  id integer primary key,
+  human_id varchar(255),
+  crc_id varchar(255),
+  amount varchar(255),
+  material varchar(255),
+  owner_researcher_affiliation varchar(255),
+  study_name varchar(255),
+  unit varchar(255)
+);
+CREATE INDEX specimens_human_id on specimens (human_id);
+CREATE INDEX specimens_crc_id on specimens (crc_id);
+
+drop table if exists foo;
+
+create table foo (
+  human_id varchar(255),
+  crc_id varchar(255),
+  amount varchar(255),
+  material varchar(255),
+  owner_researcher_affiliation varchar(255),
+  study_name varchar(255),
+  unit varchar(255)
+);
+
+.separator ","
+.import enrollmentdate.csv foo
+insert into specimens(human_id, crc_id, amount, material, owner_researcher_affiliation, study_name, unit)
+  select human_id, crc_id, amount, material, owner_researcher_affiliation, study_name, unit
+  from foo
+  where human_id != 'human_id';

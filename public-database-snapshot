@@ -6,6 +6,8 @@ phenotype_step=true
 report_step=true
 clean_step=true
 
+test_run=false
+
 set -e
 set -o pipefail
 
@@ -26,11 +28,23 @@ then
   echo "getting user list"
   ./scripts/grab_user.sh
 
+  # get specimen list
+  #
+  echo "getting specimens list"
+  ./scripts/grab_specimens.sh
+  mv ./scratch/specimens.tsv ./stage/specimens.tsv
+
   # scrape Tapestry for phenotype information
   # and file locations
   #
   echo "scraping tapestry for phenotype info"
-  ./scripts/grab_profile_data.sh scratch/hid.list
+
+  if [ $test_run = true ]
+  then
+    ./scripts/grab_profile_data.sh <( head -n10 scratch/hid.list )
+  else
+    ./scripts/grab_profile_data.sh scratch/hid.list
+  fi
 
   # collect them into tsv files
   #
@@ -38,9 +52,11 @@ then
   ./scripts/collect_profile_data.py
 
   # scrape Tapestry for enrollment dates
+  #
   echo "grabbing enrollment dates"
   ./scripts/grab_enrollment_date.sh
   cp ./scratch/hid-enrolldate.list ./stage/enrollment_date.tsv
+
 
   # insert into the untap.db.  Use it to
   # generate the list of download urls for

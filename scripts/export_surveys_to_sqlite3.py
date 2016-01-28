@@ -73,6 +73,12 @@ tables["enrollment_date"]["name"] = ["id", "human_id", "enrollment_date"]
 tables["enrollment_date"]["type"] = ["integer primary key", "varchar(255)", "varchar(255)"]
 tables["enrollment_date"]["idx"] = ["create index enrollment_date_human_idx on enrollment_date (human_id)"]
 
+tables["specimens"] = {}
+tables["specimens"]["name"] = ["id", "human_id", "crc_id", "amount", "material", "owner_researcher_affiliation", "study_name", "unit" ]
+tables["specimens"]["type"] = ["integer primary key", "varchar(255)", "varchar(255)", "varchar(255)", "varchar(255)", "varchar(255)", "varchar(255)", "varchar(255)" ]
+tables["specimens"]["idx"] = ["create index specimens_human_idx on specimens (human_id)",
+    "create index specimens_crc_id_idx on specimens (crc_id)" ]
+
 
 def populate_table(curs, table, fn):
   curs.execute("drop table if exists " + table)
@@ -101,6 +107,9 @@ def populate_table(curs, table, fn):
       for i,v in enumerate(row):
         irow.append(v)
       curs.execute("insert into " + table + " " + ff + " values " + qq, irow)
+
+  for idx_line in tables[table]["idx"]:
+    curs.execute(idx_line)
 
 conn = sqlite3.connect(OUT_SQLITE3_DB)
 conn.text_factory = str
