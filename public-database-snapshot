@@ -9,10 +9,10 @@ clean_step=true
 test_run=false
 
 ## debug
-phenotype_step=true
-report_step=true
-clean_step=true
-test_run=true
+#phenotype_step=true
+#report_step=true
+#clean_step=true
+#test_run=true
 
 set -e
 set -o pipefail
