@@ -73,11 +73,19 @@ tables["enrollment_date"]["name"] = ["id", "human_id", "enrollment_date"]
 tables["enrollment_date"]["type"] = ["integer primary key", "varchar(255)", "varchar(255)"]
 tables["enrollment_date"]["idx"] = ["create index enrollment_date_human_idx on enrollment_date (human_id)"]
 
+#tables["specimens"] = {}
+#tables["specimens"]["name"] = ["id", "human_id", "crc_id", "amount", "material", "owner_researcher_affiliation", "study_name", "unit" ]
+#tables["specimens"]["type"] = ["integer primary key", "varchar(255)", "varchar(255)", "varchar(255)", "varchar(255)", "varchar(255)", "varchar(255)", "varchar(255)" ]
+#tables["specimens"]["idx"] = ["create index specimens_human_idx on specimens (human_id)",
+#    "create index specimens_crc_id_idx on specimens (crc_id)" ]
+#
+
 tables["specimens"] = {}
-tables["specimens"]["name"] = ["id", "human_id", "crc_id", "amount", "material", "owner_researcher_affiliation", "study_name", "unit" ]
-tables["specimens"]["type"] = ["integer primary key", "varchar(255)", "varchar(255)", "varchar(255)", "varchar(255)", "varchar(255)", "varchar(255)", "varchar(255)" ]
+tables["specimens"]["name"] = ["id",                  "human_id",     "href",         "text",         "description",  "log_date", "log_text",     "log_description" ]
+tables["specimens"]["type"] = ["integer primary key", "varchar(255)", "varchar(255)", "varchar(255)", "varchar(255)", "datetime", "varchar(255)", "varchar(255)" ]
 tables["specimens"]["idx"] = ["create index specimens_human_idx on specimens (human_id)",
-    "create index specimens_crc_id_idx on specimens (crc_id)" ]
+    "create index specimens_href_idx on specimens (href)",
+    "create index specimens_log_date_idx on specimens (log_date)" ]
 
 
 def populate_table(curs, table, fn):
