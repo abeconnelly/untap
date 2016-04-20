@@ -244,7 +244,7 @@
 
 
             <div class='row'>
-              <div class="col-sm-6"> <code>id</code> <code>json_record</code> </div> 
+              <div class="col-sm-6"> <code>id</code> <code>json_record</code> </div>
               <div class="col-sm-6"> <code>id</code> <code>uploaded_data_id</code> <code>insuff_record_index</code> </div>
             </div>
 
@@ -256,20 +256,17 @@
             </div>
 
             <div class='row'>
-              <div class="col-sm-6"> <code>id</code> <code>human_id</code> <code>amount</code> </div>
-              <div class='col-sm-6'> <b></b> </div>
-            </div>
 
-            <div class='row'>
-              <div class="col-sm-6"> <code>material</code> <code>owner_researcher_affiliation</code>  </div>
-              <div class='col-sm-6'> <b></b> </div>
-            </div>
+              <div class="col-sm-6">
+                <code>id</code> <code>human_id</code> <code>href</code>
+                <code>text</code> <code>description</code>
+                <code>log_date</code> <code>log_text</code>
+                <code>log_description</code>
+              </div>
 
-            <div class='row'>
-              <div class="col-sm-6"> <code>study_name</code> <code>unit</code>  </div>
               <div class='col-sm-6'> <b></b> </div>
-            </div>
 
+            </div>
           </div>
 
           <div class="modal-footer">
@@ -567,7 +564,7 @@
   </tr>
 
   <tr>
-    <td rowspan='7'><b style='font-size:125%;'>specimens</b></td>
+    <td rowspan='8'><b style='font-size:125%;'>specimens</b></td>
     <td><code>id</code></td>
     <td><mark>int</mark></td>
     <td><em>123</em></td>
@@ -579,33 +576,39 @@
   </tr>
 
   <tr>
-    <td><code>amount</code></td>
+    <td><code>href</code></td>
     <td><mark>string</mark></td>
-    <td><em>2 to 4</em></td>
+    <td><em>https://my.pgp-hms.org/collection_events/1</em></td>
   </tr>
 
   <tr>
-    <td><code>material</code></td>
-    <td><mark>string</mark></td>
-    <td><em>Whole Blood</em></td>
-  </tr>
-
-  <tr>
-    <td><code>owner_researcher_affiliation</code></td>
-    <td><mark>string</mark></td>
-    <td><em>Harvard University</em></td>
-  </tr>
-
-  <tr>
-    <td><code>study_name</code></td>
+    <td><code>description</code></td>
     <td><mark>string</mark></td>
     <td><em>PGP Blood Collection</em></td>
   </tr>
 
   <tr>
-    <td><code>unit</code></td>
+    <td><code>log_description</code></td>
     <td><mark>string</mark></td>
-    <td><em>ml</em></td>
+    <td><em>Sample 92175438 (whole blood) received 2013-05-06 21:27:59 UTC by hu826751.</em></td>
+  </tr>
+
+  <tr>
+    <td><code>log_date</code></td>
+    <td><mark>datetime</mark></td>
+    <td><em>2011-09-15 17:09:29 UTC</em></td>
+  </tr>
+
+  <tr>
+    <td><code>log_text</code></td>
+    <td><mark>string</mark></td>
+    <td><em>hu826751</em></td>
+  </tr>
+
+  <tr>
+    <td><code>log_description</code></td>
+    <td><mark>string</mark></td>
+    <td><em>Sample received by participant</em></td>
   </tr>
 
   <tr>
