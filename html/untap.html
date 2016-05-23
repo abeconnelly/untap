@@ -173,7 +173,7 @@
 
             <div class='row'>
               <div class='col-sm-6'> <b>demographics</b> </div>
-        <div class='col-sm-6'> <b>enrollment_date</b> </div>
+              <div class='col-sm-6'> <b>enrollment_date</b> </div>
             </div>
 
       <div class='row'>
@@ -252,7 +252,7 @@
 
             <div class='row'>
               <div class='col-sm-6'> <b>specimens</b> </div>
-              <div class='col-sm-6'> <b></b> </div>
+              <div class='col-sm-6'> <b>geographic_information</b> </div>
             </div>
 
             <div class='row'>
@@ -264,9 +264,13 @@
                 <code>log_description</code>
               </div>
 
-              <div class='col-sm-6'> <b></b> </div>
+              <div class="col-sm-6">
+                <code>id</code> <code>human_id</code>
+                <code>state</code> <code>zip</code>
+              </div>
 
             </div>
+
           </div>
 
           <div class="modal-footer">
@@ -374,6 +378,7 @@
 <li><a href="../medications.tsv">medications.tsv</a></li>
 <li><a href="../procedures.tsv">procedures.tsv</a></li>
 <li><a href="../specimens.tsv">specimens.tsv</a></li>
+<li><a href="../geographic_information.tsv">geographic_information.tsv</a></li>
 <li><a href="../survey.tsv">survey.tsv</a></li>
 <li><a href="../test_results.tsv">test_results.tsv</a></li>
 <li><a href="../uploaded_data.tsv">uploaded_data.tsv</a></li>
@@ -765,6 +770,29 @@
   </tr>
 
   <tr>
+    <td rowspan='4'><b style='font-size:125%;'>geographic_information</b></td>
+    <td><code>id</code></td>
+    <td><mark>int</mark></td>
+    <td><em>123</em></td>
+  </tr>
+  <tr>
+    <td><code>human_id</code></td>
+    <td><mark>string</mark></td>
+    <td><em>hu826751</em></td>
+  </tr>
+  <tr>
+    <td><code>state</code></td>
+    <td><mark>string</mark></td>
+    <td><em>New York</em></td>
+  </tr>
+  <tr>
+    <td><code>zip</code></td>
+    <td><mark>string</mark></td>
+    <td><em>10012</em></td>
+  </tr>
+
+
+  <tr>
     <td rowspan='3'><b style='font-size:125%;'>enrollment_date</b></td>
     <td><code>id</code></td>
     <td><mark>int</mark></td>
@@ -986,6 +1014,12 @@
                   </div>
                   <div class='btn-group btn-group-xs' role='group'>
                     <button type='button' class='btn btn-default' onclick='untap_example_query("demographics");'>demographics</button>
+                  </div>
+                </div>
+
+                <div class='btn-group btn-group-justified btn-group-xs' role='group'>
+                  <div class='btn-group btn-group-xs' role='group'>
+                    <button type='button' class='btn btn-default' onclick='untap_example_query("geographic_information");'>geographic_information</button>
                   </div>
                   <div class='btn-group btn-group-xs' role='group'>
                     <button type='button' class='btn btn-default' onclick='untap_example_query("enrollment_date");'>enrollment_date</button>

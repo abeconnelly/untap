@@ -50,8 +50,17 @@ do
   then
 
     # uploaded data
-    cat $tdir/$huid.html | pup 'h3:contains("Uploaded") + div table json{}' | jq -c '.[0].children[].children'  | egrep -v '^null$' | jq  -c '.[].children[1:] | [.[0].text, .[1].text, .[2].text, .[3].text, .[4].text, .[4].children[0].href, .[5].text, .[5].children[0].href ]' > $tdir/$huid.uploaded_data
+    cat $tdir/$huid.html | pup 'h3:contains("Uploaded") + div table json{}' | \
+      jq -c '.[0].children[].children'  | egrep -v '^null$' | \
+      jq -c '.[].children[1:] | [.[0].text, .[1].text, .[2].text, .[3].text, .[4].text, .[4].children[0].href, .[5].text, .[5].children[0].href ]' > $tdir/$huid.uploaded_data
 
+  fi
+
+  z=`cat $tdir/$huid.html | pup 'h3:contains("Geographic Information") + table'`
+  if [ ! -z "$z" ]
+  then
+    cat $tdir/$huid.html | pup 'h3:contains("Geographic Information") + table tbody json{}' | \
+      jq -c '.[0].children[].children | [ .[0].text, .[1].text ]' | tr -d ':' > $tdir/$huid.geographic_information
   fi
 
 

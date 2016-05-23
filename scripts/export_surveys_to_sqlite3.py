@@ -48,6 +48,11 @@ tables["demographics"]["name"] = ["id", "human_id", "date_of_birth", "gender", "
 tables["demographics"]["type"] = ["integer primary key", "varchar(255)", "varchar(255)", "varchar(255)", "varchar(255)", "varchar(255)", "varchar(255)", "varchar(255)"]
 tables["demographics"]["idx"] = ["create index demographics_idx on demographics(human_id)"]
 
+tables["geographic_information"] = {}
+tables["geographic_information"]["name"] = ["id", "human_id", "state", "zip" ]
+tables["geographic_information"]["type"] = ["integer primary key", "varchar(255)", "varchar(255)", "varchar(255)" ]
+tables["geographic_information"]["idx"] = ["create index geographic_information_idx on geographic_information(human_id)"]
+
 tables["immunizations"] = {}
 tables["immunizations"]["name"] = ["id", "human_id", "name", "date"]
 tables["immunizations"]["type"] = ["integer primary key", "varchar(255)", "varchar(255)", "varchar(255)"]

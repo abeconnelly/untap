@@ -29,6 +29,8 @@ for phen in phen_suffix:
   phen_db[phen] = []
   phen_db_header[phen] = []
 
+## demographic information
+##
 DEMOGRAPHIC_LEN=7
 phen_db_header["demographics"] = {}
 
@@ -41,6 +43,18 @@ demo_db_header= { "human_id" : 0, "Date of Birth" : 1,
 phen_db["demographics"] = []
 
 phen_db_header["demographics"] = [ "human_id", "Date of Birth", "Gender", "Weight", "Height", "Blood Type", "Race" ]
+
+## geographic information
+##
+GEOGRAPHIC_INFORMATION_LEN=3
+phen_db_header["geographic_information"] = {}
+
+geo_db_header = {"human_id":0, "State":1, "Zip code":2}
+phen_db["geographic_information"] = []
+phen_db_header["geographic_information"] = [ "human_id", "State", "Zip code" ]
+
+##
+##
 
 def load_phen(fn, db, huid):
   with open(fn) as fp:
@@ -82,6 +96,22 @@ def load_demo(fn, huid):
 
     phen_db["demographics"].append(values)
 
+def load_geo(fn, huid):
+
+  values = [None]*GEOGRAPHIC_INFORMATION_LEN
+  values[0] = huid
+
+  with open(fn) as fp:
+    geo_pos = 1
+    for l in fp:
+      l = l.strip()
+      if l == "": continue
+
+      j = json.loads(l)
+      ind = geo_db_header[j[0]]
+      values[ind] = j[1]
+
+    phen_db["geographic_information"].append(values)
 
 
 for huid in huids:
@@ -100,6 +130,11 @@ for huid in huids:
   fqfn = os.path.join(inpdir, huid, huid)
   if not os.path.exists(fqfn + ".demographics"): continue
   load_demo(fqfn + ".demographics", huid)
+
+for huid in huids:
+  fqfn = os.path.join(inpdir, huid, huid)
+  if not os.path.exists(fqfn + ".geographic_information"): continue
+  load_geo(fqfn + ".geographic_information", huid)
 
 
 sp.check_output(["mkdir", "-p", STAGE_DIR])
@@ -121,5 +156,9 @@ with open(STAGE_DIR + "/" + phen + ".tsv", "w") as ofp:
     csv_ofp.writerow(r)
 
 
-
-
+phen = "geographic_information"
+with open(STAGE_DIR + "/" + phen + ".tsv", "w") as ofp:
+  csv_ofp = csv.writer(ofp, delimiter='\t', lineterminator="\n")
+  csv_ofp.writerow(phen_db_header[phen])
+  for r in phen_db[phen]:
+    csv_ofp.writerow(r)

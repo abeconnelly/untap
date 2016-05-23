@@ -17,8 +17,16 @@ test_run=false
 set -e
 set -o pipefail
 
+if [ $clean_start = true ] ; then
+  rm -rf stage
+  rm -rf out-data
+  rm -rf scratch
+fi
+
+
 mkdir -p stage
 mkdir -p out-data
+mkdir -p scratch
 
 if [ $phenotype_step = true ]
 then
