@@ -11,6 +11,8 @@ import sys
 import json
 import subprocess as sp
 
+FMT_LINES = "fmt_lines.py"
+
 print "human_id\tdate\tphenotype_category\tphenotype"
 
 def norm_ts(ts):
@@ -52,6 +54,8 @@ SURV_DIR + "PGP_Trait_Disease_Survey_2012_Respiratory_System.csv",
 SURV_DIR + "PGP_Trait_Disease_Survey_2012_Skin_and_Subcutaneous_Tissue.csv",
 SURV_DIR + "PGP_Trait_Disease_Survey_2012_Vision_and_hearing.csv" ]
 
+fn_phenotype = [ SURV_DIR + "PGP_Basic_Phenotypes_Survey_2015.csv" ]
+
 
 g_phenotype_class = {}
 
@@ -60,9 +64,7 @@ g_phenotype_class = {}
 # fields, noticing when a line has a newline inside of a double quote.  It deletes
 # the newline and puts the field element all on one line.
 #
-#txt = sp.check_output( "fmt_lines.pl " + fn_survey + " | csvtool col 1- -u TAB -", shell=True)
-#txt = sp.check_output( "fmt_lines.py " + fn_survey + " | csvtool col 1- -u TAB -", shell=True)
-txt = sp.check_output( ["fmt_lines.py", fn_survey ] )
+txt = sp.check_output( [FMT_LINES, fn_survey ] )
 lines = txt.split("\n")
 enum_phen = {}
 
@@ -134,18 +136,18 @@ for fn in fn_trait:
   # fields, noticing when a line has a newline inside of a double quote.  It deletes
   # the newline and puts the field element all on one line.
   #
-  #txt = sp.check_output( "fmt_lines.pl " + fn + " | csvtool col 1- -u TAB -", shell=True)
-  #txt = sp.check_output( "fmt_lines.py " + fn + " | csvtool col 1- -u TAB -", shell=True)
-  txt = sp.check_output( [ "fmt_lines.py", fn ] )
+  txt = sp.check_output( [ FMT_LINES, fn ] )
   lines = txt.split("\n")
 
   enum_phen = {}
-
   phen_prefix = re.sub( r'^.*PGP_Trait_Disease_Survey_2012_(.*)\.csv', r'\1', fn )
 
   header = True
   for l in lines:
     field = l.split("\t")
+
+    # skip interpreting the header
+    #
     if header:
       header = False
       continue
@@ -154,7 +156,6 @@ for fn in fn_trait:
       if len(field)>1:
         pass
       continue
-
 
 
     field_huid,raw_ts,uuid,enum_type,freetext = field
@@ -203,4 +204,74 @@ for fn in fn_trait:
     if len(tt) > 0:
       print field_huid + "\t" + ts + "\t" + phen_prefix + ":other\t" + tt
 
+pheno_header = {}
+for fn in fn_phenotype:
+
+  # Some fields span multiple lines, embedded in quotes.  fmt_lines.pl takes care of these
+  # fields, noticing when a line has a newline inside of a double quote.  It deletes
+  # the newline and puts the field element all on one line.
+  #
+  txt = sp.check_output( [ FMT_LINES, fn ] )
+  lines = txt.split("\n")
+
+  enum_phen = {}
+
+  phen_prefix = re.sub( r'^.*PGP_(.*)_Survey_\d+.*\.csv', r'\1', fn )
+
+  header = True
+  for l in lines:
+    field = l.split("\t")
+
+    # skip interpreting the header
+    #
+    if header:
+      header = False
+
+      for k,v in enumerate(field[3:]):
+        header_field = re.sub( r'^\s*\d+\.\d+\s*[^\sa-zA-Z0-9]*\s*', '', v)
+        pheno_header[k] = header_field
+      continue
+
+    if len(field)<3:
+      continue
+
+    field_huid = field[0]
+    raw_ts = field[1]
+    uuid = field[2]
+
+    ts = norm_ts(raw_ts)
+
+    if field_huid not in huid_ts_phen:
+      huid_ts_phen[field_huid] = {}
+
+    if ts not in huid_ts_phen[field_huid]:
+      huid_ts_phen[field_huid][ts] = { "huID": field_huid, "timestamp":ts }
+
+    for enum_pos, enum_type in enumerate(field[3:]):
+
+      enum_type = enum_type.strip(' ')
+      if len(enum_type) == 0:
+        continue
+
+      # Some fields have extra commas in them so we have to take special
+      # consideration.
+      #
+
+      # replace commas with '%2C' (url-code for comma) when a comma appears
+      # inside of a parenthsis string.
+      #
+      # For example:
+      #
+      #  Chronic tension headaches (15+ days per month, at least 6 months)
+      #
+      # will be replaced with:
+      #
+      #  Chronic tension headaches (15+ days per month%2C at least 6 months)
+      #
+      et_csv = re.sub( r'(\([^\)]*),([^\)]*\))', r'\1%2C\2', enum_type )
+
+      for et in et_csv.split(","):
+        et = et.strip(' ')
+        if len(et) > 0:
+          print field_huid + "\t" + ts + "\t" + phen_prefix + ":" + pheno_header[enum_pos] + "\t" + et
 
