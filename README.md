@@ -3,7 +3,7 @@ untap
 
 In order to facilitate ease of access, some of the information available through [Harvard Personal Genome Project](http://www.personalgenomes.org/) page and the [GET-Evidence](http://evidence.pgp-hms.org/about) site has been consolidated into a small SQLite database (~120Mb uncompressed).  This project is a collection of scripts to download data, consolidate into a SQLite database, upload to an [Arvados](https://arvados.org/) project and create an HTML visualization front end for easy exploration of the data.
 
-You can explore the most recent snapshot of the Harvard Personal Genome Project database snapshot available through [a Curoverse hosted collection](http://curoverse.link/2210f7ee07fc1c8b926e5db28eff9635+3284/html/index.html).
+You can explore the most recent snapshot of the Harvard Personal Genome Project database snapshot available through [a Curoverse hosted collection](https://workbench.su92l.arvadosapi.com/collections/2210f7ee07fc1c8b926e5db28eff9635+3284/html/index.html?disposition=inline&size=33766)
 
 Quick start
 ---
@@ -35,7 +35,7 @@ $ sudo chmod -R 777 /var/www/untap
 $ sudo nginx -s reload
 ```
 
-Now we need to obtain a dataset. Either 1) download the snapshot provided at [the Untap hosted on Curoverse](http://curoverse.link/2210f7ee07fc1c8b926e5db28eff9635+3284/html/index.html) or 2) follow the instructions in the following section to scrape [Tapestry](http://my.pgp-hms.org) and build your own snapshot. In both cases, the database should be put in the root directory, i.e. `/untap/hu-pgp.sqlite3.gz`. 
+Now we need to obtain a dataset. Either 1) download the snapshot provided at [the Untap hosted on Curoverse](https://workbench.su92l.arvadosapi.com/collections/2210f7ee07fc1c8b926e5db28eff9635+3284/html/index.html?disposition=inline&size=33766) or 2) follow the instructions in the following section to scrape [Tapestry](http://my.pgp-hms.org) and build your own snapshot. In both cases, the database should be put in the root directory, i.e. `/untap/hu-pgp.sqlite3.gz`. 
 
 Now if you go to [Untap.html](./html/untap.html) you should see the application running and tabs such as "Summary" should show graphs when you select a dropdown option (e.g. "allergies"). 
 
