@@ -3,7 +3,8 @@ untap
 
 In order to facilitate ease of access, some of the information available through [Harvard Personal Genome Project](http://www.personalgenomes.org/) page and the [GET-Evidence](http://evidence.pgp-hms.org/about) site has been consolidated into a small SQLite database (~120Mb uncompressed).  This project is a collection of scripts to download data, consolidate into a SQLite database, upload to an [Arvados](https://arvados.org/) project and create an HTML visualization front end for easy exploration of the data.
 
-You can explore the most recent snapshot of the Harvard Personal Genome Project database snapshot available through [a Curoverse hosted collection](https://workbench.su92l.arvadosapi.com/collections/2210f7ee07fc1c8b926e5db28eff9635+3284/html/index.html?disposition=inline&size=33766)
+You can explore the most recent snapshot of the Harvard Personal Genome Project database snapshot available through [a Curoverse hosted collection](https://collections.su92l.arvadosapi.com/c=eddaf802f9f889014e20743c510eb62c-3577/_/arv-stage/html/index.html?disposition=inline)
+
 
 Quick start
 ---
