@@ -23,6 +23,6 @@ done
 mv untap.sqlite3.gz hu-pgp.sqlite3.gz
 
 dtstr=`date +'%Y-%m-%d+%H:%M:%S'`
-arv-put --project-uuid $project_uuid --name HU-PGP-DB-$dtstr .
+arv-put --project-uuid $project_uuid --name HU-PGP-DB-$dtstr ./
 
 cd ..

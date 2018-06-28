@@ -52,7 +52,7 @@ Now if you go to [Untap.html](./html/untap.html) you should see the application 
 Updating the Database
 ---
 
-The Quick start uses a static dump of the database and may not be up-to-date. To re-scrape all the data yourself for a more up-to-date copy, see the following instructions.
+The Quick start uses a static snapshot of the database and may not be up-to-date. To re-scrape all the data yourself for a more up-to-date copy, see the following instructions.
 
 You may need several dependencies if they're not installed already.
 
@@ -70,7 +70,7 @@ $ sudo apt-get install parallel
 To download the database from `my.pgp-hms.org` and `evidence.pgp-hms.org` run:
 
 ```bash
-$ ./public-database-dump
+$ ./public-database-snapshot
 ```
 
 If you would like to upload to an [Arvados](https://arvados.org) project (requires an account on an Arvados system and appropriate config files):
